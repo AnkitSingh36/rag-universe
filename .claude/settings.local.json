@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from ui_styles import apply_global_styles, sidebar_nav; print\\('ui_styles OK'\\)\")"
+    ]
+  }
+}
