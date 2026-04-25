@@ -4,6 +4,11 @@
 > Theory · Visualization · 9 Runnable RAG Types · Build Your Own
 
 ---
+# DEMO
+
+> > https://ankitsingh36.github.io/rag-universe/
+
+---
 
 ## 🤔 What Is RAG? (Plain English)
 
@@ -20,7 +25,7 @@ No RAG = Closed Book Exam (AI guesses from memory)
 ## 🚀 Setup in 5 Minutes
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/rag-universe.git
+git clone https://github.com/AnkitSingh36/rag-universe.git
 cd rag-universe
 pip install -r requirements.txt
 streamlit run app.py

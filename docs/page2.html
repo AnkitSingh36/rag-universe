@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How RAG Works — RAG Master Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>2️⃣</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050B18; --bg2: #0A1628; --bg3: #0D1A30;
+      --card: #0D1526; --border: rgba(99,102,241,0.15);
+      --indigo: #6366f1; --purple: #8b5cf6; --green: #10b981; --amber: #f59e0b;
+      --text: #E2E8F0; --muted: #8892A4; --light: #c7d2fe;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,11,24,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #818cf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 0.85rem; text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { color: var(--light); }
+    .nav-btn { background: linear-gradient(135deg, var(--indigo), var(--purple)); color: white !important; padding: 0.4rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem !important; }
+    .page-hero { padding: 4rem 2rem 3rem; max-width: 1100px; margin: 0 auto; }
+    .page-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.5rem; }
+    .page-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.6rem; }
+    .page-sub { color: var(--muted); font-size: 0.95rem; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.22), transparent); max-width: 1100px; margin: 0 auto; }
+    section { padding: 3.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .sec-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
+    .sec-title { font-size: clamp(1.3rem, 2.5vw, 1.7rem); font-weight: 800; margin-bottom: 0.6rem; }
+    .sec-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 700px) { .phase-grid { grid-template-columns: 1fr; } }
+    .phase-card { background: rgba(13,21,38,0.95); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.5rem; }
+    .phase-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+    .phase-1 { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25); color: #818cf8; }
+    .phase-2 { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+    .pipeline { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; margin: 1rem 0; }
+    .pipe-box { background: rgba(17,24,39,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.45rem 0.7rem; font-size: 0.8rem; color: var(--light); font-weight: 600; white-space: nowrap; }
+    .pipe-arrow { color: var(--indigo); font-size: 0.9rem; }
+    .steps-list { display: grid; gap: 1rem; }
+    .step { display: flex; gap: 1rem; align-items: flex-start; }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: #818cf8; flex-shrink: 0; }
+    .step-body { flex: 1; }
+    .step-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+    .step-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .step-detail { margin-top: 0.5rem; background: rgba(5,11,24,0.7); border: 1px solid rgba(99,102,241,0.1); border-radius: 8px; padding: 0.6rem 0.8rem; font-family: 'Courier New', monospace; font-size: 0.78rem; color: #94a3b8; line-height: 1.7; }
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .concept-card { background: rgba(13,21,38,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.1rem; }
+    .concept-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .concept-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+    .concept-desc { font-size: 0.81rem; color: var(--muted); line-height: 1.55; }
+    .analogy-box { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05)); border: 1px solid rgba(99,102,241,0.18); border-left: 3px solid var(--indigo); border-radius: 12px; padding: 1.4rem 1.6rem; }
+    .analogy-box h4 { font-size: 0.9rem; font-weight: 700; color: var(--light); margin-bottom: 0.6rem; }
+    .analogy-box p { font-size: 0.87rem; color: var(--muted); line-height: 1.65; }
+    code { font-family: 'Courier New', monospace; background: rgba(99,102,241,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: #a5b4fc; }
+    .nav-pages { display: flex; justify-content: space-between; align-items: center; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .nav-page-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 10px; font-size: 0.88rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(99,102,241,0.2); color: var(--muted); background: rgba(99,102,241,0.04); transition: all 0.2s; }
+    .nav-page-btn:hover { border-color: rgba(99,102,241,0.4); color: var(--light); }
+    .nav-page-btn.next { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1)); border-color: rgba(99,102,241,0.3); color: var(--light); }
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; }
+    footer a { color: #818cf8; text-decoration: none; }
+    @media (max-width: 768px) { nav { padding: 0 1rem; } .nav-links a:not(.nav-btn) { display: none; } section { padding: 2.5rem 1.2rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">🧠 RAG Master Guide</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="page1.html">1 · Use RAG?</a>
+    <a href="page2.html" class="active">2 · How It Works</a>
+    <a href="page3.html">⭐ Demo</a>
+    <a href="page4.html">4 · Compare</a>
+    <a href="page5.html">5 · Encyclopedia</a>
+    <a href="page6.html">6 · Build</a>
+    <a href="https://github.com/AnkitSingh36/rag-universe" class="nav-btn" target="_blank">⭐ GitHub</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-label">Page 2 of 6</div>
+  <div class="page-title">How RAG Works — Step by Step</div>
+  <p class="page-sub">Trace every pipeline step live — chunking, embedding, vector search, retrieval, and generation.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- BIG PICTURE -->
+<section>
+  <div class="sec-label">Overview</div>
+  <div class="sec-title">🗺️ The Big Picture — 2 Phases</div>
+  <p class="sec-sub">RAG has two phases: storing knowledge once, then answering queries in real-time.</p>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-badge phase-1">Phase 1 — Store</div>
+      <div style="font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem;">Storing Knowledge</div>
+      <div style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Happens once, when you load your documents</div>
+      <div class="pipeline">
+        <div class="pipe-box">📄 Documents</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">✂️ Chunker</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">🔢 Embedder</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">🗄️ Vector DB</div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-badge phase-2">Phase 2 — Query</div>
+      <div style="font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem;">Answering Questions</div>
+      <div style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Runs every time a user asks something</div>
+      <div class="pipeline">
+        <div class="pipe-box">❓ Query</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">🔢 Embed</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">🔍 Search</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">📋 Retrieve</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">💬 Generate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHASE 1 STEPS -->
+<section>
+  <div class="sec-label">Phase 1 — Deep Dive</div>
+  <div class="sec-title">📥 Storing Your Documents</div>
+  <p class="sec-sub">This runs once (or whenever you update your documents). The result is a searchable vector database.</p>
+
+  <div class="steps-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Load Documents</div>
+        <div class="step-desc">Read your raw text — PDFs, Word docs, web pages, databases. Strip formatting, keep content.</div>
+        <div class="step-detail">Input: "The Moon landing occurred on July 20, 1969. Neil Armstrong..."<br>       "Einstein developed the theory of relativity in 1905..."</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Chunk Into Pieces</div>
+        <div class="step-desc">Split long documents into small overlapping windows (~300 characters). This keeps each chunk focused on one idea — easier to retrieve precisely.</div>
+        <div class="step-detail">Chunk 1: "The Moon landing occurred on July 20, 1969. Neil Armstrong..."<br>Chunk 2: "Neil Armstrong became the first human to walk on..."<br>Chunk 3: "...walk on the Moon. Buzz Aldrin followed shortly after."</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Embed Each Chunk</div>
+        <div class="step-desc">Run each chunk through a sentence-transformer model. The output is a 384-number vector (an "embedding") that encodes the meaning of the text.</div>
+        <div class="step-detail">"Moon landing July 1969" → [0.23, -0.41, 0.87, 0.12, ..., 0.05]<br>                              ← 384 numbers representing the meaning →</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Store in FAISS Vector Database</div>
+        <div class="step-desc">Save all vectors in FAISS — Facebook's fast similarity search library. Now your documents are searchable by meaning, not just keywords.</div>
+        <div class="step-detail">FAISS index: 1,247 vectors indexed<br>Storage: ~0.5 MB for 1,000 chunks<br>Search speed: &lt;10ms for 1M vectors</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHASE 2 STEPS -->
+<section>
+  <div class="sec-label">Phase 2 — Deep Dive</div>
+  <div class="sec-title">🔍 Answering a Question</div>
+  <p class="sec-sub">This runs every time a user asks a question. Fast, deterministic, no hallucination from retrieval.</p>
+
+  <div class="steps-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Receive the Query</div>
+        <div class="step-desc">The user types a question in natural language. No preprocessing needed.</div>
+        <div class="step-detail">User query: "Who was the first person to walk on the Moon?"</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Embed the Query</div>
+        <div class="step-desc">Run the same embedding model on the query. This gives us a vector in the same 384-dimensional space as all our chunks.</div>
+        <div class="step-detail">"first person walk Moon" → [0.19, -0.38, 0.91, 0.09, ..., 0.07]</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Vector Similarity Search</div>
+        <div class="step-desc">FAISS finds the chunks whose vectors are closest to the query vector using L2 distance. "Closest" means "most similar in meaning".</div>
+        <div class="step-detail">Score 0.94: "Neil Armstrong became the first human to walk on..."<br>Score 0.81: "The Moon landing occurred on July 20, 1969..."<br>Score 0.67: "Buzz Aldrin was the second person to walk..."</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Retrieve Top-K Chunks</div>
+        <div class="step-desc">Take the top 3 most relevant chunks. These become the "context" for the LLM. You can adjust K from 1–10 depending on how much context you need.</div>
+        <div class="step-detail">Retrieved 3 chunks from 1,247 indexed<br>Total context: ~900 characters<br>Retrieval time: 3ms</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Generate Answer</div>
+        <div class="step-desc">The LLM reads the retrieved chunks + the question and generates an answer grounded in your documents. It cannot hallucinate what isn't there.</div>
+        <div class="step-detail">Prompt: "Using ONLY this context, answer: Who first walked on Moon?\nContext: Neil Armstrong became the first human..."<br>Answer: "Neil Armstrong was the first person to walk on the Moon."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- KEY CONCEPTS -->
+<section>
+  <div class="sec-label">Core Vocabulary</div>
+  <div class="sec-title">📚 Key Concepts Explained Simply</div>
+  <p class="sec-sub">The five things you must understand to work with any RAG system.</p>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-icon">🔢</div>
+      <div class="concept-title">Embedding</div>
+      <div class="concept-desc">Text → a list of 384 numbers. Similar texts produce similar number lists. This is how computers understand "meaning".</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">✂️</div>
+      <div class="concept-title">Chunking</div>
+      <div class="concept-desc">Splitting a document into ~300-character pieces with overlap (~50 chars). Overlap prevents context from being cut off at boundaries.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🗄️</div>
+      <div class="concept-title">FAISS</div>
+      <div class="concept-desc">Facebook AI Similarity Search. A fast library for finding nearest neighbors in high-dimensional space. Searches 1M vectors in milliseconds.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">📐</div>
+      <div class="concept-title">L2 Distance</div>
+      <div class="concept-desc">How "far apart" two vectors are. Closer = more similar. Score = <code>1 / (1 + distance)</code>. Score 1.0 = identical, 0.0 = unrelated.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🔝</div>
+      <div class="concept-title">Top-K</div>
+      <div class="concept-desc">Retrieve the K most similar chunks. K=3 is a common default — enough context without overwhelming the LLM.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🧠</div>
+      <div class="concept-title">Sentence Transformer</div>
+      <div class="concept-desc">The embedding model (e.g., <code>all-MiniLM-L6-v2</code>, 22MB). Converts any text to 384-dim vectors that capture semantic meaning.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ANALOGY -->
+<section>
+  <div class="sec-label">Intuition Builder</div>
+  <div class="sec-title">🎓 The Open Book Exam Analogy</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="analogy-box" style="border-left-color: #ef4444; background: rgba(239,68,68,0.04); border-color: rgba(239,68,68,0.18);">
+      <h4 style="color: #fca5a5;">❌ Closed Book Exam (No RAG)</h4>
+      <p>The student (LLM) can only use what they memorized before the exam (training cutoff). They may guess wrong and sound confident. Outdated, no private info.</p>
+    </div>
+    <div class="analogy-box" style="border-left-color: #10b981; background: rgba(16,185,129,0.04); border-color: rgba(16,185,129,0.18);">
+      <h4 style="color: #a7f3d0;">✅ Open Book Exam (With RAG)</h4>
+      <p>Before answering, the student looks up the relevant page in their textbook (retrieval). Then they answer from what they read — grounded, accurate, verifiable.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="nav-pages">
+  <a href="page1.html" class="nav-page-btn">← 1 · Use RAG?</a>
+  <a href="page3.html" class="nav-page-btn next">⭐ 3 · Test Any RAG →</a>
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="https://github.com/AnkitSingh36">AnkitSingh36</a> &nbsp;·&nbsp; <a href="https://github.com/AnkitSingh36/rag-universe">GitHub</a> &nbsp;·&nbsp; <a href="index.html">Home</a></p>
+</footer>
+
+</body>
+</html>
