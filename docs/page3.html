@@ -33,50 +33,100 @@
     .sec-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
     .sec-title { font-size: clamp(1.3rem, 2.5vw, 1.7rem); font-weight: 800; margin-bottom: 0.6rem; }
     .sec-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
-    /* Mock UI */
-    .mock-ui { background: rgba(9,15,27,0.95); border: 1px solid rgba(99,102,241,0.2); border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.05); }
-    .mock-toolbar { background: rgba(13,21,38,0.9); border-bottom: 1px solid rgba(99,102,241,0.1); padding: 0.7rem 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
-    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .mock-title { font-size: 0.8rem; color: var(--muted); margin-left: 0.5rem; font-weight: 500; }
-    .mock-body { display: grid; grid-template-columns: 240px 1fr; min-height: 460px; }
-    @media (max-width: 700px) { .mock-body { grid-template-columns: 1fr; } .mock-sidebar { border-right: none; border-bottom: 1px solid rgba(99,102,241,0.1); } }
-    .mock-sidebar { border-right: 1px solid rgba(99,102,241,0.1); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
-    .mock-sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.2rem; }
-    .mock-select { background: rgba(5,11,24,0.8); border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.82rem; color: var(--light); font-weight: 500; }
-    .mock-slider-track { height: 4px; background: rgba(255,255,255,0.06); border-radius: 999px; position: relative; margin-top: 0.4rem; }
-    .mock-slider-fill { position: absolute; left: 0; top: 0; height: 100%; width: 60%; background: linear-gradient(90deg, var(--indigo), var(--purple)); border-radius: 999px; }
-    .mock-slider-thumb { position: absolute; top: 50%; transform: translateY(-50%); left: 60%; width: 12px; height: 12px; border-radius: 50%; background: white; box-shadow: 0 0 6px rgba(99,102,241,0.5); }
-    .mock-toggle { display: flex; align-items: center; gap: 0.5rem; }
-    .mock-toggle-track { width: 32px; height: 18px; border-radius: 999px; background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3); position: relative; }
-    .mock-main { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
-    .mock-step { background: rgba(13,21,38,0.7); border: 1px solid rgba(99,102,241,0.1); border-radius: 12px; padding: 1rem 1.2rem; }
-    .mock-step-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
-    .mock-step-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.35); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #818cf8; flex-shrink: 0; }
-    .mock-step-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
-    .mock-input { background: rgba(5,11,24,0.7); border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; color: var(--muted); width: 100%; }
-    .mock-chunks { display: flex; flex-direction: column; gap: 0.5rem; }
-    .mock-chunk { display: flex; align-items: flex-start; gap: 0.7rem; background: rgba(5,11,24,0.5); border: 1px solid rgba(255,255,255,0.04); border-radius: 8px; padding: 0.6rem 0.8rem; }
-    .mock-chunk-score { font-size: 0.7rem; font-weight: 800; color: #34d399; min-width: 38px; text-align: center; padding: 0.15rem 0.35rem; background: rgba(16,185,129,0.08); border-radius: 5px; }
-    .mock-chunk-text { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
-    .mock-answer { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.18); border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--light); line-height: 1.6; }
-    /* RAG types grid */
+
+    /* ── Live Demo UI ── */
+    .demo-shell { background: rgba(9,15,27,0.95); border: 1px solid rgba(99,102,241,0.25); border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.05); }
+    .demo-toolbar { background: rgba(13,21,38,0.9); border-bottom: 1px solid rgba(99,102,241,0.1); padding: 0.7rem 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .demo-toolbar-title { font-size: 0.8rem; color: var(--muted); margin-left: 0.5rem; font-weight: 500; }
+    .demo-body { display: grid; grid-template-columns: 220px 1fr; min-height: 500px; }
+    @media (max-width: 700px) { .demo-body { grid-template-columns: 1fr; } .demo-sidebar { border-right: none; border-bottom: 1px solid rgba(99,102,241,0.1); } }
+    .demo-sidebar { border-right: 1px solid rgba(99,102,241,0.1); padding: 1.2rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .sb-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
+    .sb-info { padding: 0.4rem 0.6rem; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 6px; font-size: 0.75rem; color: #818cf8; }
+    .sb-select { width: 100%; background: rgba(5,11,24,0.8); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; padding: 0.45rem 0.7rem; font-size: 0.8rem; color: var(--light); font-family: inherit; cursor: pointer; appearance: none; }
+    .sb-select:focus { outline: none; border-color: rgba(99,102,241,0.5); }
+    .range-row { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+    input[type=range] { width: 100%; accent-color: var(--indigo); cursor: pointer; margin-top: 0.4rem; }
+    .demo-main { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; overflow: hidden; }
+    .step-block { background: rgba(13,21,38,0.7); border: 1px solid rgba(99,102,241,0.1); border-radius: 12px; padding: 1rem 1.2rem; }
+    .step-hdr { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.35); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #818cf8; flex-shrink: 0; }
+    .step-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+    .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.5rem; }
+    .topic-btn { background: rgba(5,11,24,0.6); border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; padding: 0.5rem 0.6rem; font-size: 0.78rem; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: left; font-family: inherit; }
+    .topic-btn:hover { border-color: rgba(99,102,241,0.35); color: var(--light); }
+    .topic-btn.active { border-color: var(--indigo); background: rgba(99,102,241,0.12); color: var(--light); font-weight: 600; }
+    .custom-toggle { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; font-size: 0.78rem; color: var(--muted); cursor: pointer; }
+    .custom-toggle input[type=checkbox] { accent-color: var(--indigo); cursor: pointer; }
+    textarea.custom-text { width: 100%; background: rgba(5,11,24,0.7); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.8rem; color: var(--text); font-family: inherit; resize: vertical; min-height: 90px; margin-top: 0.5rem; }
+    textarea.custom-text:focus { outline: none; border-color: rgba(99,102,241,0.5); }
+    .rag-btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; }
+    .rag-btn { background: rgba(5,11,24,0.6); border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: left; font-family: inherit; }
+    .rag-btn:hover { border-color: rgba(99,102,241,0.35); color: var(--light); }
+    .rag-btn.active { border-color: var(--indigo); background: rgba(99,102,241,0.12); color: var(--light); font-weight: 700; }
+    .rag-btn small { display: block; font-size: 0.68rem; color: var(--muted); font-weight: 400; margin-top: 0.1rem; }
+    .q-row { display: flex; gap: 0.6rem; }
+    input.q-input { flex: 1; background: rgba(5,11,24,0.7); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; padding: 0.55rem 0.9rem; font-size: 0.85rem; color: var(--text); font-family: inherit; }
+    input.q-input:focus { outline: none; border-color: rgba(99,102,241,0.5); }
+    input.q-input::placeholder { color: var(--muted); }
+    .run-btn { background: linear-gradient(135deg, var(--indigo), var(--purple)); color: white; border: none; border-radius: 8px; padding: 0.55rem 1.2rem; font-size: 0.83rem; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.15s; }
+    .run-btn:hover { opacity: 0.88; }
+    .run-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    /* Results */
+    #results-area { display: none; flex-direction: column; gap: 0.9rem; }
+    #results-area.visible { display: flex; }
+    .res-block { background: rgba(13,21,38,0.7); border: 1px solid rgba(99,102,241,0.1); border-radius: 12px; padding: 1rem 1.2rem; }
+    .res-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.7rem; }
+    .res-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+    .res-meta { font-size: 0.72rem; color: var(--muted); }
+    .chunk-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .chunk-row { display: flex; align-items: flex-start; gap: 0.7rem; background: rgba(5,11,24,0.5); border: 1px solid rgba(255,255,255,0.04); border-radius: 8px; padding: 0.6rem 0.8rem; }
+    .chunk-score { font-size: 0.7rem; font-weight: 800; min-width: 42px; text-align: center; padding: 0.15rem 0.35rem; border-radius: 5px; flex-shrink: 0; }
+    .score-high { color: #34d399; background: rgba(16,185,129,0.08); }
+    .score-mid  { color: #fbbf24; background: rgba(245,158,11,0.08); }
+    .score-low  { color: #f87171; background: rgba(239,68,68,0.08); }
+    .chunk-body { font-size: 0.78rem; color: var(--muted); line-height: 1.55; flex: 1; }
+    .chunk-tag { font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 4px; margin-left: 0.4rem; }
+    .tag-hybrid { background: rgba(99,102,241,0.12); color: #818cf8; }
+    .tag-keyword { background: rgba(245,158,11,0.1); color: #fbbf24; }
+    .tag-semantic { background: rgba(16,185,129,0.1); color: #34d399; }
+    .tag-compressed { background: rgba(139,92,246,0.12); color: #c4b5fd; }
+    mark.hl { background: rgba(245,158,11,0.18); color: #fbbf24; border-radius: 2px; padding: 0 2px; }
+    .answer-box { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.18); border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.87rem; color: var(--light); line-height: 1.65; }
+    .verdict { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .verdict-correct   { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+    .verdict-ambiguous { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
+    .verdict-incorrect { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    .log-box { background: rgba(5,11,24,0.6); border: 1px solid rgba(99,102,241,0.08); border-radius: 8px; padding: 0.6rem 0.9rem; font-size: 0.75rem; color: var(--muted); line-height: 1.9; font-family: 'Courier New', monospace; }
+    .log-box span.ok  { color: #34d399; }
+    .log-box span.dim { color: #4a5568; }
+    .log-box span.hi  { color: #818cf8; }
+    .conv-history { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .conv-turn { font-size: 0.78rem; padding: 0.5rem 0.7rem; border-radius: 8px; }
+    .conv-turn.user { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15); color: var(--light); }
+    .conv-turn.bot  { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.12); color: var(--muted); }
+    .conv-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+    /* RAG type cards */
     .rag-types-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
     .rag-type-card { background: rgba(13,21,38,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.1rem; transition: all 0.2s; cursor: default; }
     .rag-type-card:hover { border-color: rgba(99,102,241,0.3); box-shadow: 0 4px 16px rgba(99,102,241,0.08); transform: translateY(-2px); }
     .rag-type-name { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
-    .rag-type-tag { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; }
+    .rag-type-tag  { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; }
     .rag-type-pills { display: flex; flex-wrap: wrap; gap: 0.3rem; }
     .pill { padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
     .pill-speed { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
-    .pill-acc { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
-    .pill-mem { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+    .pill-acc   { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+    .pill-mem   { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
     /* Test scenarios */
     .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
     .test-card { background: rgba(13,21,38,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 1.2rem; }
-    .test-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
+    .test-num   { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
     .test-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
     .test-steps { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
-    .test-look { margin-top: 0.7rem; padding: 0.5rem 0.7rem; background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.15); border-radius: 8px; font-size: 0.78rem; color: #a7f3d0; }
+    .test-look  { margin-top: 0.7rem; padding: 0.5rem 0.7rem; background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.15); border-radius: 8px; font-size: 0.78rem; color: #a7f3d0; }
+    .test-q-btn { margin-top: 0.6rem; background: none; border: 1px solid rgba(99,102,241,0.2); color: #818cf8; font-size: 0.75rem; padding: 0.3rem 0.7rem; border-radius: 6px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .test-q-btn:hover { background: rgba(99,102,241,0.08); }
     .nav-pages { display: flex; justify-content: space-between; align-items: center; padding: 2rem; max-width: 1100px; margin: 0 auto; }
     .nav-page-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 10px; font-size: 0.88rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(99,102,241,0.2); color: var(--muted); background: rgba(99,102,241,0.04); transition: all 0.2s; }
     .nav-page-btn:hover { border-color: rgba(99,102,241,0.4); color: var(--light); }
@@ -106,146 +156,154 @@
   <div class="star-badge">⭐ Star Feature</div>
   <div class="page-label">Page 3 of 6 — Interactive Demo</div>
   <div class="page-title">Test Any RAG — Live Demo</div>
-  <p class="page-sub">Pick any of 9 RAG architectures · Paste your text or pick a sample topic · Ask a question · See every pipeline detail.</p>
+  <p class="page-sub">Pick any of 5 RAG architectures · Choose a sample topic or paste your own text · Ask a question · See every pipeline detail — <strong style="color:var(--light)">runs 100% in your browser, no install needed.</strong></p>
 </div>
 
 <div class="divider"></div>
 
-<!-- MOCK UI -->
+<!-- LIVE DEMO -->
 <section>
-  <div class="sec-label">Interface Preview</div>
-  <div class="sec-title">🖥️ What the Live Demo Looks Like</div>
-  <p class="sec-sub">The real Streamlit app lets you interact with every control below. Clone the repo and run <code style="font-family:monospace;background:rgba(99,102,241,0.08);padding:0.1rem 0.5rem;border-radius:4px;color:#a5b4fc">streamlit run app.py</code> to try it.</p>
+  <div class="sec-label">Interactive Demo</div>
+  <div class="sec-title">🖥️ Try It Right Here</div>
+  <p class="sec-sub">Everything runs in pure JavaScript — no Python, no server, no API keys required.</p>
 
-  <div class="mock-ui">
-    <div class="mock-toolbar">
-      <div class="mock-dot" style="background:#ef4444"></div>
-      <div class="mock-dot" style="background:#f59e0b"></div>
-      <div class="mock-dot" style="background:#10b981"></div>
-      <div class="mock-title">⭐ Test Any RAG — Live Demo · localhost:8501</div>
+  <div class="demo-shell">
+    <div class="demo-toolbar">
+      <div class="demo-dot" style="background:#ef4444"></div>
+      <div class="demo-dot" style="background:#f59e0b"></div>
+      <div class="demo-dot" style="background:#10b981"></div>
+      <div class="demo-toolbar-title">⭐ Test Any RAG — Live Demo · browser</div>
     </div>
-    <div class="mock-body">
-      <div class="mock-sidebar">
+    <div class="demo-body">
+
+      <!-- Sidebar -->
+      <div class="demo-sidebar">
         <div>
-          <div class="mock-sidebar-label">⚙️ Settings</div>
-          <div class="mock-toggle" style="margin-top:0.5rem">
-            <div class="mock-toggle-track"></div>
-            <span style="font-size:0.78rem;color:var(--muted)">🦙 Use Ollama LLM</span>
-          </div>
-          <div style="margin-top:0.5rem;padding:0.4rem 0.6rem;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:6px;font-size:0.75rem;color:#818cf8">💡 Demo mode — no LLM needed</div>
+          <div class="sb-label">⚙️ Mode</div>
+          <div class="sb-info">💡 Demo mode — extractive QA<br>Runs fully in-browser</div>
         </div>
         <div>
-          <div class="mock-sidebar-label">Retrieve top-k chunks</div>
-          <div class="mock-slider-track"><div class="mock-slider-fill"></div><div class="mock-slider-thumb"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:0.3rem;font-size:0.72rem;color:var(--muted)"><span>1</span><span style="color:var(--light);font-weight:600">3</span><span>5</span></div>
+          <div class="sb-label">Retrieve top-k chunks</div>
+          <input type="range" id="topk-slider" min="1" max="5" value="3">
+          <div class="range-row"><span>1</span><span id="topk-val" style="color:var(--light);font-weight:600">3</span><span>5</span></div>
         </div>
-        <div style="margin-top:0.5rem;border-top:1px solid rgba(99,102,241,0.08);padding-top:1rem">
-          <div class="mock-sidebar-label" style="margin-bottom:0.5rem">Navigation</div>
-          <div style="display:flex;flex-direction:column;gap:0.3rem">
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">🏠 Home</div>
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">1️⃣ When to Use RAG?</div>
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">2️⃣ How RAG Works</div>
-            <div style="font-size:0.78rem;color:#c7d2fe;font-weight:700;padding:0.3rem 0.5rem;border-radius:6px;background:rgba(99,102,241,0.1)">⭐ Test Any RAG</div>
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">4️⃣ Compare RAGs</div>
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">📖 Encyclopedia</div>
-            <div style="font-size:0.78rem;color:var(--muted);padding:0.3rem 0.5rem;border-radius:6px">🛠️ Build Your Own</div>
+        <div>
+          <div class="sb-label">Selected RAG</div>
+          <div id="sb-rag-name" style="font-size:0.8rem;color:var(--light);font-weight:600;padding:0.4rem 0;min-height:1.4rem">🔵 Naive RAG</div>
+        </div>
+        <div style="margin-top:auto;border-top:1px solid rgba(99,102,241,0.08);padding-top:1rem">
+          <div class="sb-label" style="margin-bottom:0.5rem">Navigation</div>
+          <div style="display:flex;flex-direction:column;gap:0.25rem">
+            <a href="index.html"  style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">🏠 Home</a>
+            <a href="page1.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">1️⃣ When to Use RAG?</a>
+            <a href="page2.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">2️⃣ How RAG Works</a>
+            <span style="font-size:0.75rem;color:#c7d2fe;font-weight:700;padding:0.25rem 0.4rem;border-radius:5px;background:rgba(99,102,241,0.1)">⭐ Test Any RAG</span>
+            <a href="page4.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">4️⃣ Compare RAGs</a>
+            <a href="page5.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">📖 Encyclopedia</a>
+            <a href="page6.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;padding:0.25rem 0.4rem;border-radius:5px">🛠️ Build Your Own</a>
           </div>
         </div>
       </div>
-      <div class="mock-main">
-        <div class="mock-step">
-          <div class="mock-step-header"><div class="mock-step-num">1</div><div class="mock-step-title">Choose Your Knowledge Base</div></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
-            <div>
-              <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.3rem">Topic</div>
-              <div class="mock-select">🚀 Space Exploration</div>
-            </div>
-            <div>
-              <div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.3rem">Or paste your own text</div>
-              <div class="mock-select">Use sample topic ▾</div>
-            </div>
+
+      <!-- Main panel -->
+      <div class="demo-main">
+
+        <!-- Step 1: Topic -->
+        <div class="step-block">
+          <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Choose Your Knowledge Base</div></div>
+          <div class="topic-grid" id="topic-grid">
+            <button class="topic-btn active" data-topic="space">🚀 Space</button>
+            <button class="topic-btn" data-topic="animals">🐘 Animals</button>
+            <button class="topic-btn" data-topic="india">🇮🇳 India</button>
+            <button class="topic-btn" data-topic="tech">💻 Tech & AI</button>
+            <button class="topic-btn" data-topic="sports">⚽ Sports</button>
+          </div>
+          <label class="custom-toggle"><input type="checkbox" id="use-custom"> Use custom text instead</label>
+          <textarea class="custom-text" id="custom-text" placeholder="Paste your own document here…" style="display:none"></textarea>
+        </div>
+
+        <!-- Step 2: RAG type -->
+        <div class="step-block">
+          <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Choose RAG Architecture</div></div>
+          <div class="rag-btn-grid" id="rag-grid">
+            <button class="rag-btn active" data-rag="naive">🔵 Naive RAG<small>Pure vector search baseline</small></button>
+            <button class="rag-btn" data-rag="hybrid">🟣 Hybrid RAG<small>Keyword + semantic + RRF fusion</small></button>
+            <button class="rag-btn" data-rag="contextual">🟡 Contextual RAG<small>Compresses chunks to key sentence</small></button>
+            <button class="rag-btn" data-rag="conversational">🟢 Conversational RAG<small>Remembers previous turns</small></button>
+            <button class="rag-btn" data-rag="corrective">✅ Corrective RAG<small>Grades answer confidence</small></button>
           </div>
         </div>
-        <div class="mock-step">
-          <div class="mock-step-header"><div class="mock-step-num">2</div><div class="mock-step-title">Choose RAG Architecture</div></div>
-          <div class="mock-select" style="width:100%">⭐ Hybrid RAG — BM25 + Vector + RRF</div>
-        </div>
-        <div class="mock-step">
-          <div class="mock-step-header"><div class="mock-step-num">3</div><div class="mock-step-title">Ask a Question</div></div>
-          <div class="mock-input">Who first walked on the Moon?</div>
-          <div style="margin-top:0.6rem;display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,var(--indigo),var(--purple));padding:0.45rem 1.1rem;border-radius:8px;font-size:0.8rem;font-weight:700;color:white">▶ Run RAG</div>
-        </div>
-        <div class="mock-step">
-          <div class="mock-step-header"><div class="mock-step-num">4</div><div class="mock-step-title">Retrieved Chunks (3 found, 2ms)</div></div>
-          <div class="mock-chunks">
-            <div class="mock-chunk"><div class="mock-chunk-score">0.94</div><div class="mock-chunk-text">Neil Armstrong became the first human to walk on the Moon on July 21, 1969… <span style="background:rgba(245,158,11,0.15);color:#fbbf24;padding:0 2px;border-radius:2px">Moon</span></div></div>
-            <div class="mock-chunk"><div class="mock-chunk-score">0.81</div><div class="mock-chunk-text">The Apollo 11 mission landed on the lunar surface on July 20, 1969. Armstrong and Aldrin spent 2.5 hours outside the craft…</div></div>
-            <div class="mock-chunk"><div class="mock-chunk-score" style="color:#fbbf24">0.67</div><div class="mock-chunk-text">Buzz Aldrin was the second person to step onto the <span style="background:rgba(245,158,11,0.15);color:#fbbf24;padding:0 2px;border-radius:2px">Moon</span>, following Armstrong by about 20 minutes…</div></div>
+
+        <!-- Step 3: Question -->
+        <div class="step-block">
+          <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Ask a Question</div></div>
+          <div class="q-row">
+            <input class="q-input" id="q-input" type="text" placeholder="e.g. Who first walked on the Moon?" />
+            <button class="run-btn" id="run-btn">▶ Run RAG</button>
+          </div>
+          <div id="conv-clear-row" style="display:none;margin-top:0.5rem">
+            <button onclick="clearConv()" style="background:none;border:1px solid rgba(239,68,68,0.25);color:#f87171;font-size:0.72rem;padding:0.25rem 0.6rem;border-radius:5px;cursor:pointer;font-family:inherit">🗑 Clear conversation history</button>
           </div>
         </div>
-        <div class="mock-step">
-          <div class="mock-step-header"><div class="mock-step-num">5</div><div class="mock-step-title">Generated Answer</div></div>
-          <div class="mock-answer">Neil Armstrong was the first person to walk on the Moon, on July 21, 1969, during the Apollo 11 mission.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+
+        <!-- Results -->
+        <div id="results-area">
+
+          <!-- Step log -->
+          <div class="res-block">
+            <div class="res-hdr">
+              <span class="res-title">📋 Pipeline Log</span>
+              <span class="res-meta" id="timing-meta"></span>
+            </div>
+            <div class="log-box" id="log-box"></div>
+          </div>
+
+          <!-- Conversation history (conversational only) -->
+          <div class="res-block" id="conv-block" style="display:none">
+            <div class="res-hdr"><span class="res-title">💬 Conversation Memory</span></div>
+            <div class="conv-history" id="conv-history"></div>
+          </div>
+
+          <!-- Retrieved chunks -->
+          <div class="res-block">
+            <div class="res-hdr">
+              <span class="res-title">🔍 Retrieved Chunks</span>
+              <span class="res-meta" id="chunks-meta"></span>
+            </div>
+            <div class="chunk-list" id="chunk-list"></div>
+          </div>
+
+          <!-- Answer -->
+          <div class="res-block">
+            <div class="res-hdr"><span class="res-title">💡 Generated Answer</span></div>
+            <div id="verdict-row"></div>
+            <div class="answer-box" id="answer-box"></div>
+          </div>
+
+        </div><!-- /results-area -->
+
+      </div><!-- /demo-main -->
+    </div><!-- /demo-body -->
+  </div><!-- /demo-shell -->
 </section>
 
 <div class="divider"></div>
 
-<!-- 9 RAG TYPES -->
+<!-- 9 RAG TYPES reference -->
 <section>
   <div class="sec-label">What You Can Test</div>
-  <div class="sec-title">🔬 All 9 RAG Architectures — Live</div>
-  <p class="sec-sub">Every architecture is fully implemented and runnable. Switch between them with a single click.</p>
-
+  <div class="sec-title">🔬 All 9 RAG Architectures</div>
+  <p class="sec-sub">The live demo above covers 5 of the 9 types. All 9 are implemented in the full Streamlit app.</p>
   <div class="rag-types-grid">
-    <div class="rag-type-card">
-      <div class="rag-type-name">🔵 Naive RAG</div>
-      <div class="rag-type-tag">Pure vector search baseline</div>
-      <div class="rag-type-pills"><span class="pill pill-speed">⚡ Fastest</span><span class="pill pill-acc">Simple</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🟣 Hybrid RAG</div>
-      <div class="rag-type-tag">BM25 keyword + vector + RRF fusion</div>
-      <div class="rag-type-pills"><span class="pill pill-speed">⚡ Fast</span><span class="pill pill-acc">Better recall</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🟢 Conversational RAG</div>
-      <div class="rag-type-tag">Multi-turn memory across questions</div>
-      <div class="rag-type-pills"><span class="pill pill-mem">🧠 Memory</span><span class="pill pill-acc">Chatbot</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🔶 Rerank RAG</div>
-      <div class="rag-type-tag">Fast retrieve → precise cross-encoder rerank</div>
-      <div class="rag-type-pills"><span class="pill pill-acc">High precision</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🟡 Contextual RAG</div>
-      <div class="rag-type-tag">Compresses chunks to relevant sentences</div>
-      <div class="rag-type-pills"><span class="pill pill-speed">Token saving</span><span class="pill pill-acc">Dense</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🔮 Self-Reflective RAG</div>
-      <div class="rag-type-tag">Evaluates its own retrieval quality</div>
-      <div class="rag-type-pills"><span class="pill pill-mem">Self-aware</span><span class="pill pill-acc">High-reliability</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">✅ Corrective RAG</div>
-      <div class="rag-type-tag">Grades answers CORRECT / AMBIGUOUS / INCORRECT</div>
-      <div class="rag-type-pills"><span class="pill pill-acc">Fact-checker</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🔀 Adaptive RAG</div>
-      <div class="rag-type-tag">Auto-routes query to the best RAG type</div>
-      <div class="rag-type-pills"><span class="pill pill-mem">Smart router</span></div>
-    </div>
-    <div class="rag-type-card">
-      <div class="rag-type-name">🔗 Multi-Hop RAG</div>
-      <div class="rag-type-tag">Chains multiple retrievals via entities</div>
-      <div class="rag-type-pills"><span class="pill pill-acc">Multi-step</span><span class="pill pill-mem">Complex Q</span></div>
-    </div>
+    <div class="rag-type-card"><div class="rag-type-name">🔵 Naive RAG</div><div class="rag-type-tag">Pure vector search baseline</div><div class="rag-type-pills"><span class="pill pill-speed">⚡ Fastest</span><span class="pill pill-acc">Simple</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🟣 Hybrid RAG</div><div class="rag-type-tag">BM25 keyword + vector + RRF fusion</div><div class="rag-type-pills"><span class="pill pill-speed">⚡ Fast</span><span class="pill pill-acc">Better recall</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🟢 Conversational RAG</div><div class="rag-type-tag">Multi-turn memory across questions</div><div class="rag-type-pills"><span class="pill pill-mem">🧠 Memory</span><span class="pill pill-acc">Chatbot</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🔶 Rerank RAG</div><div class="rag-type-tag">Fast retrieve → precise cross-encoder rerank</div><div class="rag-type-pills"><span class="pill pill-acc">High precision</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🟡 Contextual RAG</div><div class="rag-type-tag">Compresses chunks to relevant sentences</div><div class="rag-type-pills"><span class="pill pill-speed">Token saving</span><span class="pill pill-acc">Dense</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🔮 Self-Reflective RAG</div><div class="rag-type-tag">Evaluates its own retrieval quality</div><div class="rag-type-pills"><span class="pill pill-mem">Self-aware</span><span class="pill pill-acc">High-reliability</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">✅ Corrective RAG</div><div class="rag-type-tag">Grades answers CORRECT / AMBIGUOUS / INCORRECT</div><div class="rag-type-pills"><span class="pill pill-acc">Fact-checker</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🔀 Adaptive RAG</div><div class="rag-type-tag">Auto-routes query to the best RAG type</div><div class="rag-type-pills"><span class="pill pill-mem">Smart router</span></div></div>
+    <div class="rag-type-card"><div class="rag-type-name">🔗 Multi-Hop RAG</div><div class="rag-type-tag">Chains multiple retrievals via entities</div><div class="rag-type-pills"><span class="pill pill-acc">Multi-step</span><span class="pill pill-mem">Complex Q</span></div></div>
   </div>
 </section>
 
@@ -254,45 +312,49 @@
 <!-- TEST GUIDE -->
 <section>
   <div class="sec-label">Test Scenarios</div>
-  <div class="sec-title">🧪 How to Test Each RAG Type</div>
-  <p class="sec-sub">Clone the repo and follow these tests to see each architecture's unique behavior.</p>
-
+  <div class="sec-title">🧪 Suggested Tests — Click to Load</div>
+  <p class="sec-sub">Each button pre-fills the question above so you can run it with one click.</p>
   <div class="test-grid">
     <div class="test-card">
       <div class="test-num">Test 1</div>
       <div class="test-title">🔵 Naive RAG — Baseline</div>
-      <div class="test-steps">Topic: 🚀 Space Exploration<br>RAG: Naive RAG<br>Ask: "Who first walked on the Moon?"</div>
-      <div class="test-look">✅ Look for: yellow query-word highlights in chunks, relevance score bars</div>
+      <div class="test-steps">Topic: 🚀 Space · RAG: Naive RAG<br>Ask: "Who first walked on the Moon?"</div>
+      <div class="test-look">✅ Look for: yellow query-word highlights in chunks, relevance scores</div>
+      <button class="test-q-btn" onclick="loadTest('space','naive','Who first walked on the Moon?')">▶ Load this test</button>
     </div>
     <div class="test-card">
       <div class="test-num">Test 2</div>
       <div class="test-title">🟣 Hybrid RAG — Keyword + Semantic</div>
-      <div class="test-steps">Topic: 💻 Technology & AI<br>RAG: Hybrid RAG<br>Ask: "What is RAG?"</div>
-      <div class="test-look">✅ Look for: chunks labeled "hybrid (both)" — found by BM25 AND vector search</div>
+      <div class="test-steps">Topic: 💻 Tech & AI · RAG: Hybrid RAG<br>Ask: "What is RAG?"</div>
+      <div class="test-look">✅ Look for: chunks labelled "hybrid" or "keyword" next to the score</div>
+      <button class="test-q-btn" onclick="loadTest('tech','hybrid','What is RAG?')">▶ Load this test</button>
     </div>
     <div class="test-card">
       <div class="test-num">Test 3</div>
       <div class="test-title">🟢 Conversational RAG — Memory</div>
-      <div class="test-steps">Topic: 🐘 Animals & Wildlife<br>Ask Q1 → Run → Then ask "How much do they eat?"</div>
+      <div class="test-steps">Topic: 🐘 Animals · RAG: Conversational<br>Ask Q1 → then ask "How much do they eat?"</div>
       <div class="test-look">✅ Look for: "Conversation Memory" section showing stored turns</div>
+      <button class="test-q-btn" onclick="loadTest('animals','conversational','How do elephants communicate?')">▶ Load Q1</button>
     </div>
     <div class="test-card">
       <div class="test-num">Test 4</div>
-      <div class="test-title">🔮 Self-Reflective RAG</div>
-      <div class="test-steps">Ask a question NOT in the document<br>e.g., "What is quantum tunneling?"</div>
-      <div class="test-look">✅ Look for: reflection steps → query expansion → low-confidence flag</div>
+      <div class="test-title">🟡 Contextual RAG — Compression</div>
+      <div class="test-steps">Topic: 🇮🇳 India · RAG: Contextual<br>Ask: "What is the Taj Mahal?"</div>
+      <div class="test-look">✅ Look for: "compressed" badge — each chunk reduced to one key sentence</div>
+      <button class="test-q-btn" onclick="loadTest('india','contextual','What is the Taj Mahal?')">▶ Load this test</button>
     </div>
     <div class="test-card">
       <div class="test-num">Test 5</div>
-      <div class="test-title">✅ Corrective RAG — Grader</div>
-      <div class="test-steps">Ask something partially covered in the doc<br>See how confidence is graded</div>
-      <div class="test-look">✅ Look for: CORRECT / AMBIGUOUS / INCORRECT classification in answer</div>
+      <div class="test-title">✅ Corrective RAG — Confidence Grader</div>
+      <div class="test-steps">Topic: ⚽ Sports · RAG: Corrective<br>Ask: "Who invented basketball?"</div>
+      <div class="test-look">✅ Look for: INCORRECT or AMBIGUOUS verdict — question not in the document</div>
+      <button class="test-q-btn" onclick="loadTest('sports','corrective','Who invented basketball?')">▶ Load this test</button>
     </div>
     <div class="test-card">
       <div class="test-num">Test 6</div>
-      <div class="test-title">🔀 Adaptive RAG — Auto-Route</div>
-      <div class="test-steps">Ask 3 questions of different complexity:<br>"What year?" → "What is ISRO?" → "Compare and contrast…"</div>
-      <div class="test-look">✅ Look for: [Adaptive routing: Used X RAG] at start of each answer</div>
+      <div class="test-title">📝 Custom Text</div>
+      <div class="test-steps">Check "Use custom text", paste any paragraph, ask a question about it</div>
+      <div class="test-look">✅ RAG runs on whatever text you provide — try your own documents</div>
     </div>
   </div>
 </section>
@@ -307,6 +369,446 @@
 <footer>
   <p>Built with ❤️ by <a href="https://github.com/AnkitSingh36">AnkitSingh36</a> &nbsp;·&nbsp; <a href="https://github.com/AnkitSingh36/rag-universe">GitHub</a> &nbsp;·&nbsp; <a href="index.html">Home</a></p>
 </footer>
+
+<script>
+// ── Sample documents ──────────────────────────────────────────────────────────
+const TOPICS = {
+  space: {
+    label: "🚀 Space Exploration",
+    text: `The Apollo 11 mission, launched on July 16, 1969, was the first crewed mission to land on the Moon. Astronauts Neil Armstrong, Buzz Aldrin, and Michael Collins made the journey. Neil Armstrong became the first human to walk on the Moon on July 20, 1969, famously saying: "That's one small step for man, one giant leap for mankind."
+
+The International Space Station (ISS) is a large spacecraft in orbit around Earth. It serves as a home where crews of astronauts and cosmonauts live. The ISS was built jointly by the United States, Russia, Canada, Japan, and the European Space Agency. It has been continuously occupied since November 2, 2000.
+
+Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System. NASA's Mars Curiosity rover landed on Mars in August 2012 and has been exploring Gale Crater ever since. It discovered that Mars once had liquid water billions of years ago, making it potentially habitable in the past.
+
+Saturn is known for its stunning ring system, which is made mostly of ice and rock. Saturn has 146 known moons, more than any other planet in our solar system. Titan, Saturn's largest moon, is the only moon in the solar system with a dense atmosphere.
+
+The speed of light in a vacuum is approximately 299,792,458 meters per second, or about 300,000 km/s. Nothing in the universe travels faster than light. Light from the Sun takes about 8 minutes to reach Earth. This means when we look at distant stars, we're actually seeing them as they were thousands of years ago.
+
+The James Webb Space Telescope (JWST) was launched on December 25, 2021. It is the most powerful space telescope ever built, designed to look at the universe in infrared light. JWST can see galaxies that formed just a few hundred million years after the Big Bang.`
+  },
+  animals: {
+    label: "🐘 Animals & Wildlife",
+    text: `Elephants are the largest land animals on Earth. They live in groups called herds, led by the oldest female. Elephants have excellent memories and can remember other elephants they met years ago. They are also known for grieving their dead — they stand around the body and touch it with their trunks. Adult elephants eat up to 150 kilograms of food per day.
+
+Dolphins are highly intelligent marine mammals. They communicate using a complex system of clicks, whistles, and sounds. Each dolphin has a unique "signature whistle" — like a name — that others use to call them. Dolphins live in groups called pods and are known for their playful behavior and helping injured members. They can swim at speeds of up to 60 kilometers per hour in short bursts.
+
+The cheetah is the fastest land animal, capable of reaching speeds of up to 120 km/h (75 mph). Unlike other big cats, cheetahs cannot roar. Instead, they chirp, purr, and yelp. A cheetah's sprint lasts only about 30 seconds because the effort generates so much body heat. After a chase, cheetahs need 15-20 minutes to rest and cool down before eating.
+
+Bees are remarkable navigators. A worker bee can fly up to 8 km to find flowers. They communicate the location of food sources through a "waggle dance" — a figure-eight movement. The angle of the dance tells others which direction to fly, and the duration tells how far. A single honeybee makes only about one-twelfth of a teaspoon of honey in its entire lifetime.
+
+Octopuses are among the most intelligent invertebrates. They have three hearts and blue blood. They can change their color and texture in milliseconds to camouflage themselves. Despite having no bones, they can squeeze through any opening larger than their beak. Octopuses have been observed using tools, solving puzzles, and even escaping from aquariums.`
+  },
+  india: {
+    label: "🇮🇳 India & Culture",
+    text: `India gained independence from British rule on August 15, 1947. Mahatma Gandhi led the non-violent independence movement, inspiring people worldwide. The Indian National Congress, under leaders like Jawaharlal Nehru, played a key role in the independence struggle.
+
+Jawaharlal Nehru became India's first Prime Minister after independence. He served from 1947 until his death in 1964. Nehru established India as a secular democratic republic and laid the foundation for modern Indian industry. He is fondly remembered as "Chacha Nehru" and his birthday, November 14, is celebrated as Children's Day.
+
+The Taj Mahal is a white marble mausoleum located in Agra, India. It was built by Mughal Emperor Shah Jahan in memory of his beloved wife, Mumtaz Mahal, who died in 1631. Construction began in 1632 and was completed in 1653, employing over 20,000 workers. The Taj Mahal is a UNESCO World Heritage Site and one of the Seven Wonders of the World.
+
+ISRO, the Indian Space Research Organisation, was founded in 1969. India became only the fourth country to successfully land on the Moon with Chandrayaan-3 in August 2023. The Mangalyaan (Mars Orbiter Mission) made India the first country to reach Mars orbit on its first attempt. ISRO's launch vehicles are among the world's most cost-effective, making India a preferred satellite launch partner.
+
+The Indian film industry, known as Bollywood, produces more films annually than Hollywood. Hindi cinema has a global audience of over 1.3 billion people across 50+ countries. India has 22 official languages and thousands of dialects, making it one of the most linguistically diverse countries. Cricket is the most popular sport in India. The Indian Premier League (IPL) is one of the richest cricket leagues.`
+  },
+  tech: {
+    label: "💻 Technology & AI",
+    text: `Artificial Intelligence (AI) is the simulation of human intelligence processes by computer systems. These processes include learning, reasoning, problem-solving, perception, and language understanding. AI was founded as an academic discipline in 1956. Today it powers voice assistants, recommendation systems, and self-driving cars.
+
+Machine learning is a subset of AI where computers learn from data without being explicitly programmed. Instead of writing rules, you feed the computer thousands of examples and it finds patterns automatically. For example, to detect spam email, you show the model thousands of spam and non-spam emails. It learns to recognize patterns like "click here to win" or suspicious sender addresses.
+
+A neural network is inspired by the human brain. It consists of layers of connected "neurons" (nodes). Data passes through the input layer, is processed through hidden layers, and produces output. Each connection has a "weight" that adjusts during training to make better predictions. Deep learning uses neural networks with many layers — hence "deep" — to solve complex problems.
+
+Large Language Models (LLMs) like GPT-4, Claude, and Gemini are trained on vast amounts of text from the internet. They learn to predict what word comes next in a sentence, which teaches them grammar, facts, and reasoning. ChatGPT was released by OpenAI in November 2022 and reached 100 million users in just 2 months. These models don't actually "understand" text — they find statistical patterns in billions of words.
+
+RAG stands for Retrieval-Augmented Generation. It combines information retrieval with LLM generation. Instead of relying only on what the LLM learned during training, RAG retrieves fresh documents at query time. This solves the "knowledge cutoff" problem and reduces hallucinations (making up facts). RAG is widely used in enterprise Q&A systems, customer support, and research assistants.`
+  },
+  sports: {
+    label: "⚽ Sports & Games",
+    text: `Sachin Tendulkar is widely regarded as the greatest batsman in cricket history. He scored 100 international centuries — a record that still stands today. Tendulkar played international cricket for 24 years, from 1989 to 2013, and scored over 34,000 international runs. He was the first person to score a double century in One Day International cricket.
+
+Virat Kohli is one of the best batsmen of the modern era. He is known for his aggressive batting and fitness. Kohli has scored 80 international centuries across all formats (Test, ODI, T20I). He holds multiple batting records in the Indian Premier League (IPL) and is known for chasing down targets. Many cricket analysts compare Kohli to Tendulkar for his consistency and match-winning ability.
+
+Brazil has won the FIFA World Cup five times — more than any other nation (1958, 1962, 1970, 1994, 2002). Pelé, the Brazilian legend, won three World Cups and is considered one of the greatest footballers ever. Lionel Messi won the FIFA World Cup with Argentina in 2022, completing his collection of every major trophy. Argentina beat France in the 2022 final in a thrilling penalty shootout in Qatar.
+
+Magnus Carlsen of Norway became the youngest chess World Champion in 2013 at age 22. He is considered the greatest chess player of all time, having held the World No. 1 ranking since 2010. Carlsen's playing style is unique — he often goes for long endgames, wearing down opponents with perfect technique. His peak rating of 2882 is the highest ever recorded in chess history.
+
+The Olympic Games are held every four years, alternating between Summer and Winter Olympics. India won its first individual Olympic gold medal in shooting when Abhinav Bindra won in Beijing 2008. Neeraj Chopra won gold in javelin throw at the 2020 Tokyo Olympics, the first track-and-field gold for India. PV Sindhu is India's most decorated Olympian, having won silver (2016) and bronze (2020) in badminton.`
+  }
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let selectedTopic = 'space';
+let selectedRag   = 'naive';
+let convHistory   = [];   // [{q, a}]
+
+// ── UI wiring ─────────────────────────────────────────────────────────────────
+document.querySelectorAll('.topic-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedTopic = btn.dataset.topic;
+    convHistory = [];
+    updateConvUI();
+  });
+});
+
+document.querySelectorAll('.rag-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rag-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedRag = btn.dataset.rag;
+    document.getElementById('sb-rag-name').textContent = btn.firstChild.textContent.trim();
+    if (selectedRag === 'conversational') {
+      document.getElementById('conv-clear-row').style.display = '';
+    } else {
+      document.getElementById('conv-clear-row').style.display = 'none';
+    }
+    convHistory = [];
+    updateConvUI();
+  });
+});
+
+const slider = document.getElementById('topk-slider');
+slider.addEventListener('input', () => {
+  document.getElementById('topk-val').textContent = slider.value;
+});
+
+const customCb   = document.getElementById('use-custom');
+const customArea = document.getElementById('custom-text');
+customCb.addEventListener('change', () => {
+  customArea.style.display = customCb.checked ? '' : 'none';
+  document.querySelectorAll('.topic-btn').forEach(b => {
+    b.disabled = customCb.checked;
+    b.style.opacity = customCb.checked ? '0.4' : '1';
+  });
+});
+
+document.getElementById('run-btn').addEventListener('click', runRAG);
+document.getElementById('q-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') runRAG();
+});
+
+// ── Text helpers ──────────────────────────────────────────────────────────────
+function getDocText() {
+  if (customCb.checked) {
+    return customArea.value.trim() || 'No text provided.';
+  }
+  return TOPICS[selectedTopic].text;
+}
+
+function chunkText(text, maxLen = 300) {
+  // Split on sentence boundaries, accumulate into ~300-char chunks
+  const sentences = text.replace(/\n+/g, ' ').match(/[^.!?]+[.!?]+/g) || [text];
+  const chunks = [];
+  let cur = '';
+  for (const s of sentences) {
+    if (cur.length + s.length > maxLen && cur.length > 0) {
+      chunks.push(cur.trim());
+      cur = s;
+    } else {
+      cur += ' ' + s;
+    }
+  }
+  if (cur.trim()) chunks.push(cur.trim());
+  return chunks;
+}
+
+function tokenize(text) {
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+}
+
+// ── TF-IDF cosine similarity ──────────────────────────────────────────────────
+function buildIDF(chunks) {
+  const df = {};
+  for (const c of chunks) {
+    const words = new Set(tokenize(c));
+    for (const w of words) df[w] = (df[w] || 0) + 1;
+  }
+  const idf = {};
+  for (const w in df) idf[w] = Math.log((chunks.length + 1) / (df[w] + 1)) + 1;
+  return idf;
+}
+
+function tfidfVec(tokens, idf) {
+  const tf = {};
+  for (const t of tokens) tf[t] = (tf[t] || 0) + 1;
+  const vec = {};
+  for (const t in tf) vec[t] = (tf[t] / tokens.length) * (idf[t] || 0.1);
+  return vec;
+}
+
+function cosine(a, b) {
+  let dot = 0, na = 0, nb = 0;
+  for (const k in a) { dot += (a[k] || 0) * (b[k] || 0); na += a[k] ** 2; }
+  for (const k in b) nb += b[k] ** 2;
+  const denom = Math.sqrt(na) * Math.sqrt(nb);
+  return denom === 0 ? 0 : dot / denom;
+}
+
+function naiveRetrieve(query, chunks, topK, idf) {
+  const qVec = tfidfVec(tokenize(query), idf);
+  return chunks
+    .map((c, i) => ({ idx: i, text: c, score: cosine(qVec, tfidfVec(tokenize(c), idf)) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK);
+}
+
+// ── BM25-style keyword score ──────────────────────────────────────────────────
+function bm25Score(query, chunk) {
+  const qTokens = tokenize(query);
+  const cTokens = tokenize(chunk);
+  const cSet = new Map();
+  for (const t of cTokens) cSet.set(t, (cSet.get(t) || 0) + 1);
+  let score = 0;
+  const k1 = 1.5, b = 0.75, avgLen = 60;
+  for (const qt of qTokens) {
+    const tf = cSet.get(qt) || 0;
+    if (tf > 0) score += (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * cTokens.length / avgLen));
+  }
+  return score;
+}
+
+// ── RRF fusion ────────────────────────────────────────────────────────────────
+function rrfFuse(rankA, rankB, k = 60) {
+  const scores = {};
+  const tagA = {}, tagB = {};
+  rankA.forEach((item, i) => { scores[item.idx] = (scores[item.idx] || 0) + 1 / (k + i + 1); tagA[item.idx] = true; });
+  rankB.forEach((item, i) => { scores[item.idx] = (scores[item.idx] || 0) + 1 / (k + i + 1); tagB[item.idx] = true; });
+  return Object.entries(scores)
+    .map(([idx, sc]) => {
+      const i = +idx;
+      let tag = tagA[i] && tagB[i] ? 'hybrid' : tagA[i] ? 'keyword' : 'semantic';
+      return { idx: i, score: sc, tag };
+    })
+    .sort((a, b) => b.score - a.score);
+}
+
+// ── Extractive answer: most query-relevant sentence in top chunk ──────────────
+function extractAnswer(topChunk, query) {
+  const sentences = topChunk.match(/[^.!?]+[.!?]+/g) || [topChunk];
+  if (sentences.length === 1) return sentences[0].trim();
+  const qVec = tfidfVec(tokenize(query), {});
+  // simple overlap scoring without IDF for answer extraction
+  let best = sentences[0], bestScore = 0;
+  for (const s of sentences) {
+    const qTokens = tokenize(query);
+    const sTokens = new Set(tokenize(s));
+    const overlap = qTokens.filter(t => sTokens.has(t)).length / (qTokens.length || 1);
+    if (overlap > bestScore) { bestScore = overlap; best = s; }
+  }
+  return best.trim();
+}
+
+// ── Highlight query words in text ─────────────────────────────────────────────
+function highlight(text, query) {
+  const words = tokenize(query).filter(w => w.length > 2);
+  if (!words.length) return escHtml(text);
+  const re = new RegExp(`\\b(${words.map(escRe).join('|')})\\b`, 'gi');
+  return escHtml(text).replace(re, '<mark class="hl">$1</mark>');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ── Score colour class ────────────────────────────────────────────────────────
+function scoreClass(s) {
+  if (s >= 0.55) return 'score-high';
+  if (s >= 0.25) return 'score-mid';
+  return 'score-low';
+}
+
+// ── Main RAG runner ───────────────────────────────────────────────────────────
+function runRAG() {
+  const rawQuery = document.getElementById('q-input').value.trim();
+  if (!rawQuery) { document.getElementById('q-input').focus(); return; }
+
+  const topK     = +slider.value;
+  const docText  = getDocText();
+  const chunks   = chunkText(docText);
+  const idf      = buildIDF(chunks);
+  const t0       = performance.now();
+  const ragType  = selectedRag;
+
+  let logs = [], retrieved = [], answer = '', verdictHtml = '';
+
+  // ── Naive RAG ──
+  if (ragType === 'naive') {
+    logs.push(`<span class="ok">✓</span> <span class="hi">Naive RAG</span> — pure TF-IDF vector search`);
+    logs.push(`<span class="dim">›</span> Chunked document into <span class="hi">${chunks.length}</span> chunks`);
+    logs.push(`<span class="dim">›</span> Vectorising query: "<span class="hi">${escHtml(rawQuery)}</span>"`);
+    const hits = naiveRetrieve(rawQuery, chunks, topK, idf);
+    logs.push(`<span class="ok">✓</span> Retrieved top-${topK} chunks by cosine similarity`);
+    retrieved = hits.map(h => ({ text: h.text, score: Math.min(0.99, h.score * 3.2 + 0.05) }));
+    answer = extractAnswer(retrieved[0].text, rawQuery);
+    logs.push(`<span class="ok">✓</span> Extractive answer generated from top chunk`);
+  }
+
+  // ── Hybrid RAG ──
+  else if (ragType === 'hybrid') {
+    logs.push(`<span class="ok">✓</span> <span class="hi">Hybrid RAG</span> — BM25 keyword + TF-IDF cosine, fused via RRF`);
+    logs.push(`<span class="dim">›</span> Chunked document into <span class="hi">${chunks.length}</span> chunks`);
+    logs.push(`<span class="dim">›</span> Running BM25 keyword search…`);
+    const kwRank = chunks
+      .map((c, i) => ({ idx: i, score: bm25Score(rawQuery, c) }))
+      .sort((a, b) => b.score - a.score);
+    logs.push(`<span class="dim">›</span> Running TF-IDF semantic search…`);
+    const semRank = naiveRetrieve(rawQuery, chunks, chunks.length, idf);
+    logs.push(`<span class="ok">✓</span> Fusing rankings with RRF (k=60)…`);
+    const fused = rrfFuse(kwRank, semRank).slice(0, topK);
+    logs.push(`<span class="ok">✓</span> Retrieved top-${topK} fused chunks`);
+    retrieved = fused.map(f => ({
+      text: chunks[f.idx],
+      score: Math.min(0.99, f.score * 180 + 0.05),
+      tag: f.tag
+    }));
+    answer = extractAnswer(retrieved[0].text, rawQuery);
+    logs.push(`<span class="ok">✓</span> Extractive answer from top fused chunk`);
+  }
+
+  // ── Contextual RAG ──
+  else if (ragType === 'contextual') {
+    logs.push(`<span class="ok">✓</span> <span class="hi">Contextual RAG</span> — retrieve then compress each chunk`);
+    logs.push(`<span class="dim">›</span> Chunked document into <span class="hi">${chunks.length}</span> chunks`);
+    const hits = naiveRetrieve(rawQuery, chunks, topK, idf);
+    logs.push(`<span class="ok">✓</span> Retrieved top-${topK} chunks by cosine similarity`);
+    logs.push(`<span class="dim">›</span> Compressing each chunk to most-relevant sentence…`);
+    retrieved = hits.map(h => {
+      const compressed = extractAnswer(h.text, rawQuery);
+      return { text: compressed, score: Math.min(0.99, h.score * 3.2 + 0.05), tag: 'compressed', full: h.text };
+    });
+    logs.push(`<span class="ok">✓</span> Compressed ${topK} chunks → ${topK} key sentences`);
+    answer = retrieved[0].text;
+    logs.push(`<span class="ok">✓</span> Top compressed sentence used as answer`);
+  }
+
+  // ── Conversational RAG ──
+  else if (ragType === 'conversational') {
+    logs.push(`<span class="ok">✓</span> <span class="hi">Conversational RAG</span> — multi-turn memory`);
+    logs.push(`<span class="dim">›</span> Conversation history: <span class="hi">${convHistory.length}</span> turn(s)`);
+    let augQuery = rawQuery;
+    if (convHistory.length > 0) {
+      const ctx = convHistory.map(t => `Q: ${t.q} A: ${t.a}`).join(' ');
+      augQuery = ctx + ' ' + rawQuery;
+      logs.push(`<span class="dim">›</span> Augmenting query with conversation context…`);
+    }
+    logs.push(`<span class="dim">›</span> Chunked document into <span class="hi">${chunks.length}</span> chunks`);
+    const hits = naiveRetrieve(augQuery, chunks, topK, idf);
+    logs.push(`<span class="ok">✓</span> Retrieved top-${topK} chunks using augmented query`);
+    retrieved = hits.map(h => ({ text: h.text, score: Math.min(0.99, h.score * 3.2 + 0.05) }));
+    answer = extractAnswer(retrieved[0].text, rawQuery);
+    convHistory.push({ q: rawQuery, a: answer });
+    logs.push(`<span class="ok">✓</span> Stored turn in memory (${convHistory.length} total turns)`);
+    updateConvUI();
+  }
+
+  // ── Corrective RAG ──
+  else if (ragType === 'corrective') {
+    logs.push(`<span class="ok">✓</span> <span class="hi">Corrective RAG</span> — retrieval + confidence grading`);
+    logs.push(`<span class="dim">›</span> Chunked document into <span class="hi">${chunks.length}</span> chunks`);
+    const hits = naiveRetrieve(rawQuery, chunks, topK, idf);
+    const topScore = hits[0]?.score || 0;
+    logs.push(`<span class="ok">✓</span> Retrieved top-${topK} chunks`);
+    logs.push(`<span class="dim">›</span> Top chunk relevance score: <span class="hi">${(topScore).toFixed(3)}</span>`);
+    logs.push(`<span class="dim">›</span> Grading confidence…`);
+    retrieved = hits.map(h => ({ text: h.text, score: Math.min(0.99, h.score * 3.2 + 0.05) }));
+    const normScore = retrieved[0].score;
+    if (normScore >= 0.55) {
+      verdictHtml = `<div class="verdict verdict-correct">✅ CORRECT — high confidence (${(normScore*100).toFixed(0)}%)</div>`;
+      answer = extractAnswer(retrieved[0].text, rawQuery);
+      logs.push(`<span class="ok">✓</span> Verdict: CORRECT — answer found in document`);
+    } else if (normScore >= 0.30) {
+      verdictHtml = `<div class="verdict verdict-ambiguous">⚠️ AMBIGUOUS — medium confidence (${(normScore*100).toFixed(0)}%)</div>`;
+      answer = extractAnswer(retrieved[0].text, rawQuery) + ' (Note: limited information available in document.)';
+      logs.push(`<span class="dim">›</span> Verdict: AMBIGUOUS — partial match found`);
+    } else {
+      verdictHtml = `<div class="verdict verdict-incorrect">❌ INCORRECT — low confidence (${(normScore*100).toFixed(0)}%)</div>`;
+      answer = 'The document does not appear to contain relevant information to answer this question.';
+      logs.push(`<span class="dim">›</span> Verdict: INCORRECT — question not in document`);
+    }
+  }
+
+  const elapsed = (performance.now() - t0).toFixed(1);
+
+  // ── Render results ─────────────────────────────────────────────────────────
+  document.getElementById('timing-meta').textContent = `${elapsed} ms`;
+  document.getElementById('log-box').innerHTML = logs.join('<br>');
+
+  // Chunks
+  const chunkList = document.getElementById('chunk-list');
+  document.getElementById('chunks-meta').textContent = `${retrieved.length} found`;
+  chunkList.innerHTML = retrieved.map(r => {
+    const sc = r.score;
+    const cls = scoreClass(sc);
+    let tagHtml = '';
+    if (r.tag === 'hybrid')     tagHtml = `<span class="chunk-tag tag-hybrid">hybrid</span>`;
+    else if (r.tag === 'keyword')   tagHtml = `<span class="chunk-tag tag-keyword">keyword</span>`;
+    else if (r.tag === 'semantic')  tagHtml = `<span class="chunk-tag tag-semantic">semantic</span>`;
+    else if (r.tag === 'compressed') tagHtml = `<span class="chunk-tag tag-compressed">compressed</span>`;
+    return `<div class="chunk-row">
+      <div class="chunk-score ${cls}">${sc.toFixed(2)}</div>
+      <div class="chunk-body">${highlight(r.text, rawQuery)}${tagHtml}</div>
+    </div>`;
+  }).join('');
+
+  // Answer
+  document.getElementById('verdict-row').innerHTML = verdictHtml;
+  document.getElementById('answer-box').innerHTML = highlight(answer, rawQuery);
+
+  // Conv block
+  const convBlock = document.getElementById('conv-block');
+  convBlock.style.display = (ragType === 'conversational' && convHistory.length > 0) ? '' : 'none';
+
+  // Show results
+  const ra = document.getElementById('results-area');
+  ra.classList.add('visible');
+  ra.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateConvUI() {
+  const histEl = document.getElementById('conv-history');
+  const block  = document.getElementById('conv-block');
+  if (!convHistory.length) { block.style.display = 'none'; return; }
+  histEl.innerHTML = convHistory.map(t => `
+    <div class="conv-turn user"><div class="conv-label" style="color:#818cf8">You</div>${escHtml(t.q)}</div>
+    <div class="conv-turn bot"><div class="conv-label" style="color:#34d399">RAG</div>${escHtml(t.a)}</div>
+  `).join('');
+  if (selectedRag === 'conversational') block.style.display = '';
+}
+
+function clearConv() {
+  convHistory = [];
+  updateConvUI();
+  document.getElementById('results-area').classList.remove('visible');
+}
+
+// ── Test scenario loader ──────────────────────────────────────────────────────
+function loadTest(topic, rag, question) {
+  // Select topic
+  selectedTopic = topic;
+  document.querySelectorAll('.topic-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.topic === topic);
+  });
+  // Select RAG
+  selectedRag = rag;
+  document.querySelectorAll('.rag-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.rag === rag);
+    if (b.dataset.rag === rag) {
+      document.getElementById('sb-rag-name').textContent = b.firstChild.textContent.trim();
+    }
+  });
+  document.getElementById('conv-clear-row').style.display = rag === 'conversational' ? '' : 'none';
+  // Set question and scroll to demo
+  document.getElementById('q-input').value = question;
+  document.querySelector('.demo-shell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Auto-run after a short delay so scroll finishes
+  setTimeout(runRAG, 400);
+}
+</script>
 
 </body>
 </html>

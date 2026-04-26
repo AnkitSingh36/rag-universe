@@ -54,10 +54,10 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
     .nav-links a {
-      color: var(--muted); font-size: 0.9rem; text-decoration: none;
-      transition: color 0.2s;
+      color: var(--muted); font-size: 0.85rem; text-decoration: none;
+      transition: color 0.2s; white-space: nowrap;
     }
     .nav-links a:hover { color: var(--light); }
     .nav-btn {
@@ -315,10 +315,13 @@
 <nav>
   <div class="nav-brand">🧠 RAG Master Guide</div>
   <div class="nav-links">
-    <a href="#pages">Pages</a>
-    <a href="#rag-types">RAG Types</a>
-    <a href="#quickstart">Quick Start</a>
-    <a href="https://AnkitSingh36.github.io/rag-universe/" class="nav-btn" target="_blank">🚀 Launch Demo</a>
+    <a href="page1.html">1 · Use RAG?</a>
+    <a href="page2.html">2 · How It Works</a>
+    <a href="page3.html">⭐ Demo</a>
+    <a href="page4.html">4 · Compare</a>
+    <a href="page5.html">5 · Encyclopedia</a>
+    <a href="page6.html">6 · Build</a>
+    <a href="https://github.com/AnkitSingh36/rag-universe" class="nav-btn" target="_blank">⭐ GitHub</a>
   </div>
 </nav>
 
@@ -332,8 +335,8 @@
     No API key. No credit card. Runs 100% locally.
   </p>
   <div class="hero-actions">
-    <a href="https://AnkitSingh36.github.io/rag-universe/" class="btn-primary" target="_blank">
-      🚀 Launch Live Demo
+    <a href="page3.html" class="btn-primary">
+      ⭐ Explore the Demo Pages
     </a>
     <a href="https://github.com/AnkitSingh36/rag-universe" class="btn-secondary" target="_blank">
       ⭐ View on GitHub
@@ -369,44 +372,42 @@
   <p class="sec-sub">Each page builds on the last — from theory to hands-on testing to building your own.</p>
 
   <div class="pages-grid">
-    <div class="page-card" data-num="1">
-      <a href="page1.html">
-        <span class="page-emoji">1️⃣</span>
-        <div class="page-title">When Should I Use RAG?</div>
-        <div class="page-desc">5-question interactive quiz that tells you if RAG fits your project. 9 real-world scenarios with detailed reasoning.</div>
-        <span class="page-tag">Decision Guide</span>
-      </a>
-    </div>
-    <div class="page-card" data-num="2">
+    <a href="page1.html" class="page-card" data-num="1" style="text-decoration:none;color:inherit;display:block">
+      <span class="page-emoji">1️⃣</span>
+      <div class="page-title">When Should I Use RAG?</div>
+      <div class="page-desc">5-question interactive quiz that tells you if RAG fits your project. 9 real-world scenarios with detailed reasoning.</div>
+      <span class="page-tag">Decision Guide</span>
+    </a>
+    <a href="page2.html" class="page-card" data-num="2" style="text-decoration:none;color:inherit;display:block">
       <span class="page-emoji">2️⃣</span>
       <div class="page-title">How RAG Works</div>
       <div class="page-desc">Trace every pipeline step live — chunking, embedding, vector search, retrieval, and generation. With interactive demos for each step.</div>
       <span class="page-tag">Visual Deep-Dive</span>
-    </div>
-    <div class="page-card" data-num="3" style="border-color:rgba(99,102,241,0.3);box-shadow:0 0 24px rgba(99,102,241,0.08)">
+    </a>
+    <a href="page3.html" class="page-card" data-num="3" style="text-decoration:none;color:inherit;display:block;border-color:rgba(99,102,241,0.3);box-shadow:0 0 24px rgba(99,102,241,0.08)">
       <span class="page-emoji">⭐</span>
       <div class="page-title">Test Any RAG — Live Demo</div>
       <div class="page-desc">Pick any of 9 RAG architectures, paste any text or choose a sample topic, ask a question, and see every pipeline detail — chunks, scores, timings.</div>
       <span class="page-tag" style="background:rgba(99,102,241,0.18);border-color:rgba(99,102,241,0.35);color:#c7d2fe">⭐ Star Feature</span>
-    </div>
-    <div class="page-card" data-num="4">
+    </a>
+    <a href="page4.html" class="page-card" data-num="4" style="text-decoration:none;color:inherit;display:block">
       <span class="page-emoji">4️⃣</span>
       <div class="page-title">Compare RAG Types</div>
       <div class="page-desc">Same question, 3 RAG types, side-by-side. See latency, accuracy, and retrieved chunks compared in real time.</div>
       <span class="page-tag">Head-to-Head</span>
-    </div>
-    <div class="page-card" data-num="5">
+    </a>
+    <a href="page5.html" class="page-card" data-num="5" style="text-decoration:none;color:inherit;display:block">
       <span class="page-emoji">📖</span>
       <div class="page-title">RAG Encyclopedia</div>
       <div class="page-desc">Complete reference for every major RAG architecture — theory, visual pipeline, code, use cases, and interview Q&amp;A.</div>
       <span class="page-tag">Reference</span>
-    </div>
-    <div class="page-card" data-num="6">
+    </a>
+    <a href="page6.html" class="page-card" data-num="6" style="text-decoration:none;color:inherit;display:block">
       <span class="page-emoji">🛠️</span>
       <div class="page-title">Build Your Own RAG</div>
       <div class="page-desc">Step-by-step guide to adding your own RAG type to this project — template, integration checklist, 5 RAG ideas, and testing guide.</div>
       <span class="page-tag">DIY Builder</span>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -506,8 +507,8 @@
     <div class="cta-title">Ready to understand RAG?</div>
     <p class="cta-sub">No sign-up. No API key. Open it and start learning in under a minute.</p>
     <div class="hero-actions">
-      <a href="https://AnkitSingh36.github.io/rag-universe/" class="btn-primary" target="_blank">
-        🚀 Launch Live Demo
+      <a href="page1.html" class="btn-primary">
+        1️⃣ Start from Page 1
       </a>
       <a href="https://github.com/AnkitSingh36/rag-universe" class="btn-secondary" target="_blank">
         ⭐ Star on GitHub
@@ -525,7 +526,7 @@
     &nbsp;·&nbsp;
     Powered by <a href="https://streamlit.io" target="_blank">Streamlit</a>
     &nbsp;·&nbsp;
-    <a href="https://AnkitSingh36.github.io/rag-universe/" target="_blank">Live Demo</a>
+    <a href="page3.html">⭐ Demo Pages</a>
   </p>
   <p style="margin-top:0.5rem;font-size:0.78rem;opacity:0.5">
     RAG Master Guide — Open source, MIT License

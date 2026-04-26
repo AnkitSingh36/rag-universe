@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Your Own RAG — RAG Master Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050B18; --bg2: #0A1628;
+      --border: rgba(99,102,241,0.15);
+      --indigo: #6366f1; --purple: #8b5cf6; --green: #10b981; --amber: #f59e0b;
+      --text: #E2E8F0; --muted: #8892A4; --light: #c7d2fe;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,11,24,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #818cf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 0.85rem; text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { color: var(--light); }
+    .nav-btn { background: linear-gradient(135deg, var(--indigo), var(--purple)); color: white !important; padding: 0.4rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem !important; }
+    .page-hero { padding: 4rem 2rem 3rem; max-width: 1100px; margin: 0 auto; }
+    .page-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.5rem; }
+    .page-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.6rem; }
+    .page-sub { color: var(--muted); font-size: 0.95rem; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.22), transparent); max-width: 1100px; margin: 0 auto; }
+    section { padding: 3.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .sec-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
+    .sec-title { font-size: clamp(1.3rem, 2.5vw, 1.7rem); font-weight: 800; margin-bottom: 0.6rem; }
+    .sec-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    pre { background: rgba(5,11,24,0.95); border: 1px solid rgba(99,102,241,0.15); border-radius: 14px; padding: 1.2rem 1.4rem; font-family: 'Courier New', monospace; font-size: 0.82rem; color: #94a3b8; overflow-x: auto; line-height: 1.8; }
+    .kw { color: #818cf8; }
+    .fn { color: #34d399; }
+    .cm { color: #475569; }
+    .str { color: #fbbf24; }
+    .steps-list { display: grid; gap: 1rem; }
+    .step-card { background: rgba(13,21,38,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 1.3rem 1.5rem; display: flex; gap: 1.2rem; align-items: flex-start; transition: border-color 0.2s; }
+    .step-card:hover { border-color: rgba(99,102,241,0.25); }
+    .step-circle { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15)); border: 1px solid rgba(99,102,241,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 900; color: #818cf8; flex-shrink: 0; }
+    .step-body { flex: 1; }
+    .step-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+    .step-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .step-code { margin-top: 0.7rem; background: rgba(5,11,24,0.8); border: 1px solid rgba(99,102,241,0.1); border-radius: 8px; padding: 0.7rem 0.9rem; font-family: 'Courier New', monospace; font-size: 0.78rem; color: #94a3b8; line-height: 1.7; overflow-x: auto; }
+    .ideas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .idea-card { background: rgba(13,21,38,0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 1.3rem; transition: all 0.2s; }
+    .idea-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
+    .idea-emoji { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .idea-name { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+    .idea-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-bottom: 0.8rem; }
+    .idea-diff { font-size: 0.78rem; color: var(--indigo); font-weight: 600; }
+    .checklist { display: grid; gap: 0.5rem; }
+    .check-item { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.6rem 0.9rem; background: rgba(13,21,38,0.6); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; font-size: 0.84rem; color: var(--muted); }
+    .check-box { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid rgba(99,102,241,0.35); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+    .check-done { background: rgba(99,102,241,0.15); border-color: var(--indigo); }
+    .check-done::after { content: '✓'; font-size: 0.65rem; color: #818cf8; font-weight: 800; }
+    .info-box { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.18); border-left: 3px solid var(--indigo); border-radius: 12px; padding: 1.2rem 1.5rem; }
+    .info-box h4 { font-size: 0.9rem; font-weight: 700; color: var(--light); margin-bottom: 0.5rem; }
+    .info-box p, .info-box li { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+    .info-box ul { padding-left: 1.2rem; margin-top: 0.3rem; }
+    .nav-pages { display: flex; justify-content: space-between; align-items: center; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .nav-page-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 10px; font-size: 0.88rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(99,102,241,0.2); color: var(--muted); background: rgba(99,102,241,0.04); transition: all 0.2s; }
+    .nav-page-btn:hover { border-color: rgba(99,102,241,0.4); color: var(--light); }
+    .nav-page-btn.next { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1)); border-color: rgba(99,102,241,0.3); color: var(--light); }
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; }
+    footer a { color: #818cf8; text-decoration: none; }
+    @media (max-width: 768px) { nav { padding: 0 1rem; } .nav-links a:not(.nav-btn) { display: none; } section { padding: 2.5rem 1.2rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">🧠 RAG Master Guide</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="page1.html">1 · Use RAG?</a>
+    <a href="page2.html">2 · How It Works</a>
+    <a href="page3.html">⭐ Demo</a>
+    <a href="page4.html">4 · Compare</a>
+    <a href="page5.html">5 · Encyclopedia</a>
+    <a href="page6.html" class="active">6 · Build</a>
+    <a href="https://github.com/AnkitSingh36/rag-universe" class="nav-btn" target="_blank">⭐ GitHub</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-label">Page 6 of 6</div>
+  <div class="page-title">🛠️ Build Your Own RAG</div>
+  <p class="page-sub">Add any new RAG architecture to this project in under 30 minutes. Three steps, one interface.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- THE 3-STEP OVERVIEW -->
+<section>
+  <div class="sec-label">30-Minute Guide</div>
+  <div class="sec-title">⚡ 3 Steps to Add Your RAG Type</div>
+  <p class="sec-sub">Every RAG type shares the same interface. Once your class is wired up, it automatically appears in all 6 pages of the app.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem;">
+    <div style="background:rgba(13,21,38,0.8);border:1px solid rgba(99,102,241,0.2);border-radius:14px;padding:1.2rem;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:0.5rem">1️⃣</div>
+      <div style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">Create class</div>
+      <div style="font-size:0.78rem;color:var(--muted)">rag_core/my_rag.py</div>
+    </div>
+    <div style="background:rgba(13,21,38,0.8);border:1px solid rgba(99,102,241,0.2);border-radius:14px;padding:1.2rem;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:0.5rem">2️⃣</div>
+      <div style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">Register it</div>
+      <div style="font-size:0.78rem;color:var(--muted)">rag_core/__init__.py</div>
+    </div>
+    <div style="background:rgba(13,21,38,0.8);border:1px solid rgba(99,102,241,0.2);border-radius:14px;padding:1.2rem;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:0.5rem">3️⃣</div>
+      <div style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">Add diagram</div>
+      <div style="font-size:0.78rem;color:var(--muted)">rag_diagrams/pipeline.py</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>✅ What you get automatically (no extra work)</h4>
+    <ul>
+      <li>Your RAG appears in the "Test Any RAG" dropdown on Page 3</li>
+      <li>Compare page runs your RAG in head-to-head tests</li>
+      <li>Encyclopedia shows your diagram and description</li>
+      <li>Build Your Own page lists your RAG as an example</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEMPLATE -->
+<section id="template">
+  <div class="sec-label">Starter Template</div>
+  <div class="sec-title">📐 Step 1 — Copy This Template</div>
+  <p class="sec-sub">Create <code style="font-family:monospace;background:rgba(99,102,241,0.08);padding:0.1rem 0.4rem;border-radius:4px;color:#a5b4fc">rag_core/my_custom_rag.py</code> and fill in your logic for the 3 required methods.</p>
+
+<pre><span class="cm">"""
+rag_core/my_custom_rag.py  ── "Your RAG Name"
+
+HOW MY CUSTOM RAG WORKS:
+  Explain it simply. What problem does it solve?
+  How is it different from Naive RAG?
+  Strengths: ✅  Weaknesses: ❌
+"""</span>
+<span class="kw">from</span> .base <span class="kw">import</span> BaseRAG, Document, RAGResult
+<span class="kw">from</span> .utils <span class="kw">import</span> chunk_text, embed_texts, demo_generate
+
+
+<span class="kw">class</span> <span class="fn">MyCustomRAG</span>(BaseRAG):
+    name        = <span class="str">"My Custom RAG"</span>
+    description = <span class="str">"One sentence: what makes this RAG unique?"</span>
+    emoji       = <span class="str">"🆕"</span>
+    color       = <span class="str">"#FF6B6B"</span>   <span class="cm"># hex color for UI badges</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, chunk_size=300, overlap=50):
+        self.chunk_size = chunk_size
+        self.overlap    = overlap
+        self.chunks     = []
+        self.embeddings = []
+        <span class="cm"># Add your own state here (e.g. BM25 index, graph, etc.)</span>
+
+    <span class="kw">def</span> <span class="fn">add_documents</span>(self, texts: list[str], source: str = <span class="str">"doc"</span>) -> <span class="kw">None</span>:
+        <span class="cm">"""Index documents. Called once before any queries."""</span>
+        <span class="kw">for</span> text <span class="kw">in</span> texts:
+            chunks = chunk_text(text, self.chunk_size, self.overlap)
+            embs   = embed_texts(chunks)
+            <span class="kw">for</span> chunk, emb <span class="kw">in</span> zip(chunks, embs):
+                self.chunks.append(Document(text=chunk, source=source))
+                self.embeddings.append(emb)
+        <span class="cm"># TODO: build your custom index here</span>
+
+    <span class="kw">def</span> <span class="fn">retrieve</span>(self, query: str, top_k: int = 3) -> list[Document]:
+        <span class="cm">"""Return the top_k most relevant documents for this query."""</span>
+        <span class="cm"># TODO: implement your retrieval logic</span>
+        <span class="cm"># Must return list of Document objects with .text and .score</span>
+        <span class="kw">raise</span> NotImplementedError
+
+    <span class="kw">def</span> <span class="fn">ask</span>(self, query: str, top_k: int = 3, use_ollama: bool = <span class="kw">False</span>) -> RAGResult:
+        <span class="cm">"""Full pipeline: retrieve + generate. Returns RAGResult."""</span>
+        docs   = self.retrieve(query, top_k)
+        answer = demo_generate(query, docs, use_ollama=use_ollama)
+        <span class="kw">return</span> RAGResult(
+            query         = query,
+            answer        = answer,
+            retrieved_docs = docs,
+            rag_type      = self.name,
+        )</pre>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTEGRATION STEPS -->
+<section id="steps">
+  <div class="sec-label">Integration</div>
+  <div class="sec-title">🔌 Step 2 — Register &amp; Wire Up</div>
+  <p class="sec-sub">Two more files to touch after creating your class.</p>
+
+  <div class="steps-list">
+    <div class="step-card">
+      <div class="step-circle">2a</div>
+      <div class="step-body">
+        <div class="step-title">Register in rag_core/__init__.py</div>
+        <div class="step-desc">Add your import and register in the <code style="font-family:monospace;font-size:0.88em;color:#a5b4fc">ALL_RAG_TYPES</code> dictionary. This is all the app needs to know your RAG exists.</div>
+        <div class="step-code">from .my_custom_rag import MyCustomRAG
+
+ALL_RAG_TYPES["🆕 My Custom RAG"] = MyCustomRAG</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-circle">2b</div>
+      <div class="step-body">
+        <div class="step-title">Add a pipeline diagram in rag_diagrams/pipeline.py</div>
+        <div class="step-desc">Each RAG type has a visual HTML pipeline shown on the Encyclopedia page. Use the helper functions to build yours in under 5 lines.</div>
+        <div class="step-code">def diagram_my_custom_rag():
+    content = _row(
+        _box("Query",  "❓", "#FF6B6B"),
+        _arrow(),
+        _box("My Logic", "🔧", "#6366F1"),
+        _arrow(),
+        _box("Answer",  "💬", "#10B981"),
+    )
+    return _wrap(content, "🆕 My Custom RAG", "Brief description")
+
+DIAGRAM_MAP["My Custom RAG"] = diagram_my_custom_rag</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-circle">2c</div>
+      <div class="step-body">
+        <div class="step-title">Run the app and test</div>
+        <div class="step-desc">Your RAG now appears everywhere automatically. Open Page 3 (Test Any RAG), pick your type from the dropdown, and run a query.</div>
+        <div class="step-code">streamlit run app.py
+# Navigate to ⭐ Test Any RAG → select "🆕 My Custom RAG"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 5 RAG IDEAS -->
+<section id="ideas">
+  <div class="sec-label">Inspiration</div>
+  <div class="sec-title">💡 5 RAG Ideas to Build Next</div>
+  <p class="sec-sub">All five are achievable in under 200 lines of Python. Difficulty estimated relative to Naive RAG.</p>
+
+  <div class="ideas-grid">
+    <div class="idea-card">
+      <div class="idea-emoji">📅</div>
+      <div class="idea-name">Temporal RAG</div>
+      <div class="idea-desc">Filter retrieved chunks by date before ranking. Useful for news bots where recent articles should outrank old ones, even if semantically similar.</div>
+      <div class="idea-diff">Difficulty: ⭐ Easy — add a date field to Document, sort before top-k</div>
+    </div>
+    <div class="idea-card">
+      <div class="idea-emoji">🌐</div>
+      <div class="idea-name">Multilingual RAG</div>
+      <div class="idea-desc">Translate the query to English before embedding, retrieve English chunks, then translate the answer back. Handles corpora in multiple languages.</div>
+      <div class="idea-diff">Difficulty: ⭐⭐ Medium — wrap with translate() calls using deep-translator</div>
+    </div>
+    <div class="idea-card">
+      <div class="idea-emoji">🔐</div>
+      <div class="idea-name">Permissioned RAG</div>
+      <div class="idea-desc">Tag each chunk with an ACL (access control list). At retrieval time, filter to only chunks the current user is allowed to see.</div>
+      <div class="idea-diff">Difficulty: ⭐⭐ Medium — add metadata field, filter in retrieve()</div>
+    </div>
+    <div class="idea-card">
+      <div class="idea-emoji">🖼️</div>
+      <div class="idea-name">Multimodal RAG</div>
+      <div class="idea-desc">Use CLIP to embed both images and text queries into the same vector space. Retrieve images or diagrams alongside text chunks.</div>
+      <div class="idea-diff">Difficulty: ⭐⭐⭐ Hard — requires CLIP model + image pipeline</div>
+    </div>
+    <div class="idea-card">
+      <div class="idea-emoji">🧩</div>
+      <div class="idea-name">Ensemble RAG</div>
+      <div class="idea-desc">Run Naive + Hybrid + Rerank in parallel, then vote on which chunks appear most across all three. The intersection = high-confidence retrieval.</div>
+      <div class="idea-diff">Difficulty: ⭐⭐ Medium — instantiate 3 RAGs, merge chunk sets</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTING GUIDE -->
+<section id="testing">
+  <div class="sec-label">Quality Assurance</div>
+  <div class="sec-title">🧪 Testing Checklist</div>
+  <p class="sec-sub">Run through these checks before calling your implementation complete.</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div>
+      <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--indigo);margin-bottom:0.8rem">Correctness</div>
+      <div class="checklist">
+        <div class="check-item"><div class="check-box check-done"></div>add_documents() indexes all chunks without errors</div>
+        <div class="check-item"><div class="check-box check-done"></div>retrieve() returns Document objects with .score set</div>
+        <div class="check-item"><div class="check-box check-done"></div>ask() returns a RAGResult with non-empty .answer</div>
+        <div class="check-item"><div class="check-box"></div>Scores are in range [0, 1] (normalize if needed)</div>
+        <div class="check-item"><div class="check-box"></div>retrieve() respects the top_k parameter</div>
+        <div class="check-item"><div class="check-box"></div>Works with all 5 sample topics</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--indigo);margin-bottom:0.8rem">Edge Cases</div>
+      <div class="checklist">
+        <div class="check-item"><div class="check-box"></div>Empty query string doesn't crash</div>
+        <div class="check-item"><div class="check-box"></div>Query with no matching chunks returns graceful answer</div>
+        <div class="check-item"><div class="check-box"></div>top_k larger than total chunks doesn't crash</div>
+        <div class="check-item"><div class="check-box"></div>Very long document (10,000+ chars) chunks correctly</div>
+        <div class="check-item"><div class="check-box"></div>Works with Ollama enabled AND disabled</div>
+        <div class="check-item"><div class="check-box"></div>Second call to add_documents() adds (not replaces) docs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REAL EXAMPLES -->
+<section>
+  <div class="sec-label">Real Examples</div>
+  <div class="sec-title">📚 How the Built-In RAGs Are Structured</div>
+  <p class="sec-sub">Study these patterns from the actual implementations in <code style="font-family:monospace;font-size:0.88em;background:rgba(99,102,241,0.08);padding:0.1rem 0.4rem;border-radius:4px;color:#a5b4fc">rag_core/</code>.</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+    <div class="info-box">
+      <h4>🔵 naive_rag.py — Simplest possible</h4>
+      <ul>
+        <li>add_documents: chunk → embed → append to list</li>
+        <li>retrieve: embed query → L2 distance against all embeddings → top-k</li>
+        <li>ask: retrieve → demo_generate</li>
+        <li>~80 lines total</li>
+      </ul>
+    </div>
+    <div class="info-box" style="border-left-color:#8b5cf6;background:rgba(139,92,246,0.04);border-color:rgba(139,92,246,0.18)">
+      <h4 style="color:#c4b5fd">🟣 hybrid_rag.py — Two indexes</h4>
+      <ul>
+        <li>add_documents: build both FAISS index AND BM25 index</li>
+        <li>retrieve: run both → label results → RRF merge</li>
+        <li>Documents carry a .retrieval_method label</li>
+        <li>~140 lines total</li>
+      </ul>
+    </div>
+    <div class="info-box" style="border-left-color:#10b981;background:rgba(16,185,129,0.04);border-color:rgba(16,185,129,0.18)">
+      <h4 style="color:#a7f3d0">🟢 conversational_rag.py — Stateful</h4>
+      <ul>
+        <li>Adds self.history = [] to maintain turns</li>
+        <li>retrieve: prepend last N turns to query string</li>
+        <li>ask: append Q+A to history after each call</li>
+        <li>~120 lines total</li>
+      </ul>
+    </div>
+    <div class="info-box" style="border-left-color:#f59e0b;background:rgba(245,158,11,0.04);border-color:rgba(245,158,11,0.18)">
+      <h4 style="color:#fcd34d">🔶 rerank_rag.py — Two-stage</h4>
+      <ul>
+        <li>retrieve stage 1: top-20 via vector search</li>
+        <li>retrieve stage 2: cross-encoder scores all 20</li>
+        <li>Returns top-3 by cross-encoder score</li>
+        <li>~110 lines total</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FINAL CTA -->
+<section>
+  <div style="text-align:center;background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.06));border:1px solid rgba(99,102,241,0.18);border-radius:20px;padding:3.5rem 2rem;">
+    <div style="font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:var(--text);margin-bottom:0.6rem">You made it through all 6 pages 🎉</div>
+    <p style="color:var(--muted);font-size:0.95rem;margin-bottom:2rem">Now clone the repo, run the app, and build something cool.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://github.com/AnkitSingh36/rag-universe" target="_blank"
+         style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--indigo),var(--purple));color:white;text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:700;font-size:0.95rem;box-shadow:0 6px 24px rgba(99,102,241,0.4)">
+        ⭐ Clone on GitHub
+      </a>
+      <a href="page3.html"
+         style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);color:#a5b4fc;text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:600;font-size:0.95rem;">
+        ⭐ Try the Demo
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="nav-pages">
+  <a href="page5.html" class="nav-page-btn">← 5 · Encyclopedia</a>
+  <a href="index.html" class="nav-page-btn next">Home →</a>
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="https://github.com/AnkitSingh36">AnkitSingh36</a> &nbsp;·&nbsp; <a href="https://github.com/AnkitSingh36/rag-universe">GitHub</a> &nbsp;·&nbsp; <a href="index.html">Home</a></p>
+</footer>
+
+</body>
+</html>

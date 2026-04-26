@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG Encyclopedia — RAG Master Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050B18; --bg2: #0A1628;
+      --border: rgba(99,102,241,0.15);
+      --indigo: #6366f1; --purple: #8b5cf6; --green: #10b981; --amber: #f59e0b;
+      --text: #E2E8F0; --muted: #8892A4; --light: #c7d2fe;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(5,11,24,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #818cf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 0.85rem; text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { color: var(--light); }
+    .nav-btn { background: linear-gradient(135deg, var(--indigo), var(--purple)); color: white !important; padding: 0.4rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem !important; }
+    .page-hero { padding: 4rem 2rem 3rem; max-width: 1100px; margin: 0 auto; }
+    .page-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.5rem; }
+    .page-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.6rem; }
+    .page-sub { color: var(--muted); font-size: 0.95rem; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.22), transparent); max-width: 1100px; margin: 0 auto; }
+    section { padding: 3.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .sec-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
+    .sec-title { font-size: clamp(1.3rem, 2.5vw, 1.7rem); font-weight: 800; margin-bottom: 0.6rem; }
+    .sec-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    /* Quick ref table */
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .ref-table th { padding: 0.7rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid rgba(99,102,241,0.12); }
+    .ref-table td { padding: 0.7rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    .ref-table tr:hover td { background: rgba(99,102,241,0.03); }
+    .complexity-star { color: var(--amber); font-size: 0.85rem; }
+    .tag { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 5px; font-size: 0.72rem; font-weight: 600; }
+    .tag-simple { background: rgba(16,185,129,0.1); color: #34d399; }
+    .tag-medium { background: rgba(99,102,241,0.1); color: #818cf8; }
+    .tag-hard { background: rgba(239,68,68,0.08); color: #f87171; }
+    /* Entry cards */
+    .entry { background: rgba(9,15,27,0.95); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; overflow: hidden; margin-bottom: 1.2rem; transition: border-color 0.2s; }
+    .entry:hover { border-color: rgba(99,102,241,0.2); }
+    .entry-header { padding: 1.3rem 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; user-select: none; }
+    .entry-header::-webkit-details-marker { display: none; }
+    .entry-left { display: flex; align-items: center; gap: 1rem; }
+    .entry-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: white; flex-shrink: 0; }
+    .entry-emoji { font-size: 1.4rem; flex-shrink: 0; }
+    .entry-name { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .entry-tagline { font-size: 0.8rem; color: var(--muted); }
+    .entry-pills { display: flex; gap: 0.4rem; align-items: center; flex-shrink: 0; }
+    .entry-body { padding: 0 1.6rem 1.6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 700px) { .entry-body { grid-template-columns: 1fr; } }
+    .entry-section { background: rgba(5,11,24,0.6); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 1rem 1.2rem; }
+    .entry-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--indigo); margin-bottom: 0.7rem; }
+    .entry-section p, .entry-section li { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+    .entry-section ul { padding-left: 1.1rem; }
+    .entry-section li { margin-bottom: 0.2rem; }
+    .pipeline-row { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; margin: 0.6rem 0; }
+    .pipe-box { background: rgba(17,24,39,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; padding: 0.3rem 0.6rem; font-size: 0.76rem; color: var(--light); font-weight: 600; white-space: nowrap; }
+    .pipe-arrow { color: var(--indigo); font-size: 0.85rem; }
+    pre { background: rgba(5,11,24,0.8); border: 1px solid rgba(99,102,241,0.1); border-radius: 10px; padding: 0.8rem 1rem; font-family: 'Courier New', monospace; font-size: 0.76rem; color: #94a3b8; overflow-x: auto; line-height: 1.7; margin-top: 0.4rem; white-space: pre-wrap; }
+    .qa-item { margin-bottom: 0.8rem; }
+    .qa-q { font-size: 0.84rem; font-weight: 700; color: var(--light); margin-bottom: 0.3rem; }
+    .qa-a { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    details summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    .chevron { transition: transform 0.25s; color: var(--muted); font-size: 0.85rem; }
+    details[open] .chevron { transform: rotate(90deg); }
+    .nav-pages { display: flex; justify-content: space-between; align-items: center; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .nav-page-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 10px; font-size: 0.88rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(99,102,241,0.2); color: var(--muted); background: rgba(99,102,241,0.04); transition: all 0.2s; }
+    .nav-page-btn:hover { border-color: rgba(99,102,241,0.4); color: var(--light); }
+    .nav-page-btn.next { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1)); border-color: rgba(99,102,241,0.3); color: var(--light); }
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; }
+    footer a { color: #818cf8; text-decoration: none; }
+    @media (max-width: 768px) { nav { padding: 0 1rem; } .nav-links a:not(.nav-btn) { display: none; } section { padding: 2.5rem 1.2rem; } .entry-pills { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">🧠 RAG Master Guide</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="page1.html">1 · Use RAG?</a>
+    <a href="page2.html">2 · How It Works</a>
+    <a href="page3.html">⭐ Demo</a>
+    <a href="page4.html">4 · Compare</a>
+    <a href="page5.html" class="active">5 · Encyclopedia</a>
+    <a href="page6.html">6 · Build</a>
+    <a href="https://github.com/AnkitSingh36/rag-universe" class="nav-btn" target="_blank">⭐ GitHub</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-label">Page 5 of 6</div>
+  <div class="page-title">📖 RAG Encyclopedia</div>
+  <p class="page-sub">Theory · Visual Pipeline · Code · Interview Q&amp;A for all 11 RAG architectures.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- QUICK REFERENCE TABLE -->
+<section>
+  <div class="sec-label">Quick Reference</div>
+  <div class="sec-title">🗺️ All 11 Architectures at a Glance</div>
+  <p class="sec-sub">Types 1–9 are fully implemented and runnable. Types 10–11 are documented with theory and diagrams.</p>
+
+  <div style="overflow-x:auto;">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Core Idea</th>
+          <th>Best For</th>
+          <th>Complexity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>🔵 <strong>Naive RAG</strong></td><td>Embed → vector search → answer</td><td>Learning, simple Q&A</td><td><span class="tag tag-simple">⭐ Simple</span></td></tr>
+        <tr><td>2</td><td>🟣 <strong>Hybrid RAG</strong></td><td>BM25 + Vector + RRF fusion</td><td>Mixed keyword/semantic</td><td><span class="tag tag-medium">⭐⭐ Medium</span></td></tr>
+        <tr><td>3</td><td>🟢 <strong>Conversational RAG</strong></td><td>Stores &amp; retrieves chat history</td><td>Multi-turn chatbots</td><td><span class="tag tag-medium">⭐⭐ Medium</span></td></tr>
+        <tr><td>4</td><td>🔶 <strong>Rerank RAG</strong></td><td>Fast retrieve → precise rerank</td><td>Legal, medical, finance</td><td><span class="tag tag-medium">⭐⭐ Medium</span></td></tr>
+        <tr><td>5</td><td>🟡 <strong>Contextual RAG</strong></td><td>Compresses chunks to key sentences</td><td>Long docs, token savings</td><td><span class="tag tag-medium">⭐⭐ Medium</span></td></tr>
+        <tr><td>6</td><td>🔮 <strong>Self-Reflective RAG</strong></td><td>Evaluates retrieval &amp; answer quality</td><td>High-reliability systems</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+        <tr><td>7</td><td>✅ <strong>Corrective RAG</strong></td><td>Grades retrieval CORRECT/AMBIGUOUS/INCORRECT</td><td>Compliance, safety</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+        <tr><td>8</td><td>🔀 <strong>Adaptive RAG</strong></td><td>Routes query to best RAG type</td><td>Mixed-workload production</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+        <tr><td>9</td><td>🔗 <strong>Multi-Hop RAG</strong></td><td>Chains multiple retrievals via entities</td><td>Complex multi-step Q</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+        <tr><td>10</td><td>🕸️ <strong>Graph RAG</strong></td><td>Knowledge graph traversal</td><td>Relationship-heavy data</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+        <tr><td>11</td><td>🤖 <strong>Agentic RAG</strong></td><td>Agent plans its own retrieval</td><td>Research automation</td><td><span class="tag tag-hard">⭐⭐⭐ Hard</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ENCYCLOPEDIA ENTRIES -->
+<section>
+  <div class="sec-label">Deep Dive</div>
+  <div class="sec-title">🔬 Full Entry for Each Architecture</div>
+  <p class="sec-sub">Click any entry to expand theory, pipeline, code, and interview Q&amp;A.</p>
+
+  <!-- 1. Naive RAG -->
+  <details class="entry" open>
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#3B82F6">1</div>
+        <div class="entry-emoji">🔵</div>
+        <div>
+          <div class="entry-name">Naive RAG</div>
+          <div class="entry-tagline">The Foundation — every other RAG builds on this</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-simple">⭐ Simple</span>
+        <span class="tag" style="background:rgba(16,185,129,0.1);color:#34d399">⚡ Fastest</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>The original, simplest RAG architecture. Converts everything to meaning-vectors (embeddings), then finds the closest match at query time using L2 distance in FAISS.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">📄 Docs</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">✂️ Chunk</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔢 Embed</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🗄️ FAISS</div>
+        </div>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔢 Embed</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Search</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Generate</div>
+        </div>
+        <p style="margin-top:0.6rem"><strong style="color:var(--light)">Key limitation:</strong> Purely semantic — misses exact keyword matches like "NASA" vs "National Aeronautics".</p>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Use When / Avoid When</div>
+        <p><strong style="color:#34d399">✅ Use when:</strong> Simple Q&A, prototypes, learning, corpora where semantic search is sufficient.</p>
+        <p style="margin-top:0.5rem"><strong style="color:#f87171">❌ Avoid when:</strong> Need exact keyword matches (names, codes, product IDs), or very large corpora.</p>
+      </div>
+      <div class="entry-section" style="grid-column: span 2">
+        <div class="entry-section-title">Code</div>
+<pre>from rag_core import NaiveRAG
+
+rag = NaiveRAG(chunk_size=300, overlap=50)
+rag.add_documents(["Your document text here..."])
+result = rag.ask("Your question?")
+print(result.answer)
+print(f"Top match score: {result.retrieved_docs[0].score:.2f}")</pre>
+      </div>
+      <div class="entry-section" style="grid-column: span 2">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: Explain Naive RAG and its limitations.</div>
+          <div class="qa-a">Naive RAG embeds documents into a vector space and retrieves the nearest neighbors to the query vector. It fails when queries use different vocabulary than the source (e.g., "auto" vs "car"), and can't distinguish between semantically similar but factually different passages.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 2. Hybrid RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#8B5CF6">2</div>
+        <div class="entry-emoji">🟣</div>
+        <div>
+          <div class="entry-name">Hybrid RAG</div>
+          <div class="entry-tagline">BM25 keyword search + Vector search + RRF fusion</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-medium">⭐⭐ Medium</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Runs two independent retrievals — BM25 (keyword frequency) and FAISS (semantic vectors) — then fuses the rankings using <strong style="color:var(--light)">Reciprocal Rank Fusion (RRF)</strong>. Each method finds different chunks; fusing them gives better recall.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">📊 BM25</div><div class="pipe-arrow">+</div>
+          <div class="pipe-box">🔢 Vector</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔀 RRF</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+        <p style="margin-top:0.6rem"><strong style="color:var(--light)">RRF formula:</strong> score(d) = Σ 1 / (k + rank(d)) across all rankers. k=60 is a common constant.</p>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Use When / Avoid When</div>
+        <p><strong style="color:#34d399">✅ Use when:</strong> Queries mix technical terms (BM25 excels) with semantic meaning (vector excels). Good for product docs, code search.</p>
+        <p style="margin-top:0.5rem"><strong style="color:#f87171">❌ Avoid when:</strong> Purely semantic queries — overhead of BM25 adds latency without benefit.</p>
+      </div>
+      <div class="entry-section" style="grid-column: span 2">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: What is RRF and why is it used in Hybrid RAG?</div>
+          <div class="qa-a">RRF (Reciprocal Rank Fusion) merges two ranked lists into one by summing 1/(k+rank) for each document across all rankers. It's parameter-light, robust, and consistently outperforms score-based fusion when the two rankers use incomparable score scales (e.g., BM25 term frequency vs cosine similarity).</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 3. Conversational RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#10B981">3</div>
+        <div class="entry-emoji">🟢</div>
+        <div>
+          <div class="entry-name">Conversational RAG</div>
+          <div class="entry-tagline">Multi-turn memory — remembers prior questions</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-medium">⭐⭐ Medium</span>
+        <span class="tag" style="background:rgba(16,185,129,0.1);color:#34d399">🧠 Memory</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Maintains a sliding window of prior Q&amp;A turns as conversation history. Each new query is <strong style="color:var(--light)">enriched with context</strong> from the conversation before retrieval, so follow-up questions like "What else?" work correctly.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">💬 History</div><div class="pipe-arrow">+</div>
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔢 Embed</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Search</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">📝 Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Use When / Avoid When</div>
+        <p><strong style="color:#34d399">✅ Use when:</strong> Building chatbots where users ask follow-up questions, multi-turn customer support, tutoring systems.</p>
+        <p style="margin-top:0.5rem"><strong style="color:#f87171">❌ Avoid when:</strong> Each query is independent (no follow-ups needed) — history adds latency with no benefit.</p>
+      </div>
+      <div class="entry-section" style="grid-column: span 2">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: How does Conversational RAG handle context window limits?</div>
+          <div class="qa-a">It uses a sliding window — only the last N turns are kept in memory. Older turns are dropped or summarized. This prevents the context from growing unbounded while still enabling short-term follow-ups.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 4. Rerank RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#F59E0B">4</div>
+        <div class="entry-emoji">🔶</div>
+        <div>
+          <div class="entry-name">Rerank RAG</div>
+          <div class="entry-tagline">Fast retrieve top-20 → cross-encoder rerank to top-3</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-medium">⭐⭐ Medium</span>
+        <span class="tag" style="background:rgba(245,158,11,0.1);color:#fbbf24">High Precision</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Two-stage retrieval: <strong style="color:var(--light)">Stage 1</strong> uses fast vector search to get top-20 candidates. <strong style="color:var(--light)">Stage 2</strong> runs a slower but more accurate cross-encoder that reads query+document jointly to reorder the final top-3.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Top-20</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">⚖️ Reranker</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">✅ Top-3</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+        <p style="margin-top:0.6rem"><strong style="color:var(--light)">Key difference:</strong> Bi-encoders embed query/doc separately (fast). Cross-encoders read them together (slow but more accurate).</p>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Use When / Avoid When</div>
+        <p><strong style="color:#34d399">✅ Use when:</strong> High-stakes domains (legal, medical, finance) where precision matters more than speed.</p>
+        <p style="margin-top:0.5rem"><strong style="color:#f87171">❌ Avoid when:</strong> Real-time latency requirements under 10ms — the cross-encoder adds 15–30ms.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. Contextual RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#EAB308">5</div>
+        <div class="entry-emoji">🟡</div>
+        <div>
+          <div class="entry-name">Contextual RAG</div>
+          <div class="entry-tagline">Token-efficient — compresses chunks before sending to LLM</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-medium">⭐⭐ Medium</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>After retrieving chunks, a compression step extracts only the sentences relevant to the specific query. This reduces LLM input tokens by 60–80%, cutting cost and latency while often improving answer quality (less noise).</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">🔍 Retrieve</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">✂️ Compress</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">📦 Dense Context</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Use When / Avoid When</div>
+        <p><strong style="color:#34d399">✅ Use when:</strong> Long documents where chunks contain irrelevant filler, high token-cost LLMs, or when you need to fit more context into a limited window.</p>
+        <p style="margin-top:0.5rem"><strong style="color:#f87171">❌ Avoid when:</strong> Short chunks are already focused — compression overhead isn't worth it.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- 6. Self-Reflective RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#8B5CF6">6</div>
+        <div class="entry-emoji">🔮</div>
+        <div>
+          <div class="entry-name">Self-Reflective RAG (SELF-RAG)</div>
+          <div class="entry-tagline">Evaluates its own retrieval quality at every step</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Introduced by Asai et al. (2023). Adds <strong style="color:var(--light)">reflection tokens</strong> at each step: before retrieval (should I retrieve?), during (is this chunk relevant?), and after (is my answer good?). Can decide NOT to retrieve if the LLM already knows the answer.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🤔 Reflect?</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Retrieve</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">📊 Critique</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">✅ Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Reflection Tokens</div>
+        <ul>
+          <li><strong style="color:var(--light)">[Retrieve]</strong> — should I look something up?</li>
+          <li><strong style="color:var(--light)">[IsRel]</strong> — is this chunk relevant?</li>
+          <li><strong style="color:var(--light)">[IsSup]</strong> — does the chunk support my answer?</li>
+          <li><strong style="color:var(--light)">[IsUse]</strong> — is this answer useful / confident?</li>
+        </ul>
+      </div>
+      <div class="entry-section" style="grid-column: span 2">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: How does SELF-RAG differ from standard RAG?</div>
+          <div class="qa-a">Standard RAG always retrieves and always uses what it retrieves. SELF-RAG can skip retrieval if the model is already confident, reject irrelevant chunks mid-pipeline, and flag low-confidence answers — all via learned reflection tokens inserted into the generation stream.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 7. Corrective RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#10B981">7</div>
+        <div class="entry-emoji">✅</div>
+        <div>
+          <div class="entry-name">Corrective RAG (CRAG)</div>
+          <div class="entry-tagline">Grades every retrieved chunk and corrects bad retrievals</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Every retrieved chunk gets a grade: <strong style="color:#34d399">CORRECT</strong> (confident, use it), <strong style="color:#fbbf24">AMBIGUOUS</strong> (partially useful, compress it), or <strong style="color:#f87171">INCORRECT</strong> (wrong, discard and web-search instead).</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">🔍 Retrieve</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">📊 Grade</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box" style="background:rgba(16,185,129,0.1);color:#a7f3d0">✅ Use</div>
+          <span style="color:var(--muted);font-size:0.8rem">or</span>
+          <div class="pipe-box" style="background:rgba(239,68,68,0.1);color:#fca5a5">🌐 Search</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: What happens when CRAG grades a chunk as INCORRECT?</div>
+          <div class="qa-a">CRAG discards the chunk and falls back to a web search (or a backup retrieval source) to find better evidence. This makes it particularly robust for queries where the local knowledge base doesn't contain the answer.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 8. Adaptive RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#6366F1">8</div>
+        <div class="entry-emoji">🔀</div>
+        <div>
+          <div class="entry-name">Adaptive RAG</div>
+          <div class="entry-tagline">Classifies query complexity and routes to the right RAG</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>An upstream classifier analyzes each query and routes it: simple factual questions → Naive RAG (fast), keyword-heavy → Hybrid RAG, complex comparative → Rerank RAG. Optimal for production systems with mixed workloads.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🧠 Classifier</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔵 Naive</div>
+          <span style="color:var(--muted);font-size:0.8rem">/ 🟣 Hybrid / 🔶 Rerank</span>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Routing Rules</div>
+        <ul>
+          <li>Short / date queries → Naive RAG</li>
+          <li>Technical terms / acronyms → Hybrid RAG</li>
+          <li>"Compare", "contrast", "best" → Rerank RAG</li>
+          <li>Multi-part ("and", "also") → Multi-Hop RAG</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 9. Multi-Hop RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#6366F1">9</div>
+        <div class="entry-emoji">🔗</div>
+        <div>
+          <div class="entry-name">Multi-Hop RAG</div>
+          <div class="entry-tagline">Chains retrievals — each hop finds new entities to look up</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>For questions that require bridging multiple facts (e.g., "Who invented the technology used in the satellite that first reached Mars?"), Multi-Hop extracts entities from each retrieved chunk and uses them as queries for the next hop.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Hop 1</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🏷️ Entity</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Hop 2</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Interview Q&amp;A</div>
+        <div class="qa-item">
+          <div class="qa-q">Q: When does Multi-Hop RAG outperform Naive RAG?</div>
+          <div class="qa-a">When the answer requires connecting two separate facts that don't co-occur in any single chunk. Naive RAG finds one relevant passage; Multi-Hop uses the entities in that passage as a stepping stone to a second, different passage, then synthesizes both.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- 10. Graph RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#334155">10</div>
+        <div class="entry-emoji">🕸️</div>
+        <div>
+          <div class="entry-name">Graph RAG</div>
+          <div class="entry-tagline">Knowledge graph traversal for relationship-heavy data</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="tag" style="background:rgba(99,102,241,0.08);color:var(--muted)">📚 Documented</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>Builds a knowledge graph (entities as nodes, relationships as edges) from documents. Query traversal follows entity links rather than vector similarity, enabling answers that depend on graph structure (e.g., "What connects X and Y?").</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">📄 Docs</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🕸️ Graph Build</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔍 Traverse</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">Status in This Project</div>
+        <p>Graph RAG is documented in the Encyclopedia with theory and visual pipeline diagram. Implementation is available as a reference architecture — see the Encyclopedia page in the running app for the full diagram and code scaffold.</p>
+      </div>
+    </div>
+  </details>
+
+  <!-- 11. Agentic RAG -->
+  <details class="entry">
+    <summary class="entry-header">
+      <div class="entry-left">
+        <div class="entry-num" style="background:#334155">11</div>
+        <div class="entry-emoji">🤖</div>
+        <div>
+          <div class="entry-name">Agentic RAG</div>
+          <div class="entry-tagline">An AI agent plans and executes its own retrieval strategy</div>
+        </div>
+      </div>
+      <div class="entry-pills">
+        <span class="tag tag-hard">⭐⭐⭐ Hard</span>
+        <span class="tag" style="background:rgba(99,102,241,0.08);color:var(--muted)">📚 Documented</span>
+        <span class="chevron">›</span>
+      </div>
+    </summary>
+    <div class="entry-body">
+      <div class="entry-section">
+        <div class="entry-section-title">Theory</div>
+        <p>An LLM agent is given a set of retrieval tools and autonomously decides what to search, when to stop, and how to synthesize. It can search multiple sources, generate sub-queries, and reason step-by-step before producing a final answer.</p>
+        <div class="pipeline-row">
+          <div class="pipe-box">❓ Query</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🤖 Agent Plan</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🛠️ Tool Calls</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">🔄 Iterate</div><div class="pipe-arrow">→</div>
+          <div class="pipe-box">💬 Answer</div>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-section-title">When to Use</div>
+        <p>Research automation, complex multi-source synthesis, open-ended questions with no fixed retrieval path. Requires a capable LLM (GPT-4 class or better) to reason about tool selection reliably.</p>
+      </div>
+    </div>
+  </details>
+</section>
+
+<div class="divider"></div>
+
+<div class="nav-pages">
+  <a href="page4.html" class="nav-page-btn">← 4 · Compare RAGs</a>
+  <a href="page6.html" class="nav-page-btn next">6 · Build Your Own →</a>
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="https://github.com/AnkitSingh36">AnkitSingh36</a> &nbsp;·&nbsp; <a href="https://github.com/AnkitSingh36/rag-universe">GitHub</a> &nbsp;·&nbsp; <a href="index.html">Home</a></p>
+</footer>
+
+</body>
+</html>
