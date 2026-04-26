@@ -44,10 +44,11 @@
     .quiz-q-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--indigo); margin-bottom: 0.4rem; }
     .quiz-q-text { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.8rem; }
     .quiz-opts { display: flex; flex-direction: column; gap: 0.45rem; }
-    .quiz-opt { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.55rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); background: rgba(5,11,24,0.5); font-size: 0.85rem; color: var(--muted); cursor: default; transition: border-color 0.2s; }
-    .quiz-opt .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(99,102,241,0.3); flex-shrink: 0; margin-top: 1px; }
-    .quiz-opt.yes { border-color: rgba(16,185,129,0.25); background: rgba(16,185,129,0.04); color: #a7f3d0; }
-    .quiz-opt.yes .dot { border-color: var(--green); background: rgba(16,185,129,0.2); }
+    .quiz-opt { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.55rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); background: rgba(5,11,24,0.5); font-size: 0.85rem; color: var(--muted); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .quiz-opt:hover { border-color: rgba(99,102,241,0.3); color: var(--text); }
+    .quiz-opt .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(99,102,241,0.3); flex-shrink: 0; margin-top: 1px; transition: all 0.2s; }
+    .quiz-opt.selected { border-color: rgba(16,185,129,0.25); background: rgba(16,185,129,0.04); color: #a7f3d0; }
+    .quiz-opt.selected .dot { border-color: var(--green); background: rgba(16,185,129,0.2); }
     .result-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
     .result-label { font-size: 0.88rem; font-weight: 600; color: var(--text); min-width: 90px; }
     .bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 999px; overflow: hidden; }
@@ -109,46 +110,54 @@
   <p class="sec-sub">5 questions to diagnose your use case. Each "Yes" answer adds to your RAG score.</p>
 
   <div class="quiz-grid">
-    <div class="quiz-q">
+    <div class="quiz-q" data-q="1">
       <div class="quiz-q-num">Question 1</div>
       <div class="quiz-q-text">Does your AI need to answer questions about YOUR specific documents or data?</div>
       <div class="quiz-opts">
-        <div class="quiz-opt yes"><span class="dot"></span> Yes — it needs to know about MY files, database, or documents (+2 points)</div>
-        <div class="quiz-opt"><span class="dot"></span> No — general knowledge is fine</div>
+        <div class="quiz-opt" data-pts="2"><span class="dot"></span> Yes — it needs to know about MY files, database, or documents (+2 points)</div>
+        <div class="quiz-opt" data-pts="0"><span class="dot"></span> No — general knowledge is fine</div>
       </div>
     </div>
-    <div class="quiz-q">
+    <div class="quiz-q" data-q="2">
       <div class="quiz-q-num">Question 2</div>
       <div class="quiz-q-text">Does the information your AI needs change over time?</div>
       <div class="quiz-opts">
-        <div class="quiz-opt yes"><span class="dot"></span> Yes — information gets updated (news, prices, policies…) (+2 points)</div>
-        <div class="quiz-opt"><span class="dot"></span> No — the facts are mostly stable and permanent</div>
+        <div class="quiz-opt" data-pts="2"><span class="dot"></span> Yes — information gets updated (news, prices, policies…) (+2 points)</div>
+        <div class="quiz-opt" data-pts="0"><span class="dot"></span> No — the facts are mostly stable and permanent</div>
       </div>
     </div>
-    <div class="quiz-q">
+    <div class="quiz-q" data-q="3">
       <div class="quiz-q-num">Question 3</div>
       <div class="quiz-q-text">How serious are hallucinations (the AI making up false facts)?</div>
       <div class="quiz-opts">
-        <div class="quiz-opt yes"><span class="dot"></span> Very serious — wrong answers could cause harm or legal issues (+2 points)</div>
-        <div class="quiz-opt"><span class="dot"></span> Not critical — a few wrong answers are acceptable</div>
+        <div class="quiz-opt" data-pts="2"><span class="dot"></span> Very serious — wrong answers could cause harm or legal issues (+2 points)</div>
+        <div class="quiz-opt" data-pts="0"><span class="dot"></span> Not critical — a few wrong answers are acceptable</div>
       </div>
     </div>
-    <div class="quiz-q">
+    <div class="quiz-q" data-q="4">
       <div class="quiz-q-num">Question 4</div>
       <div class="quiz-q-text">What kind of questions will users ask?</div>
       <div class="quiz-opts">
-        <div class="quiz-opt yes"><span class="dot"></span> Specific factual questions about documents ("What is the refund policy?") (+1 point)</div>
-        <div class="quiz-opt"><span class="dot"></span> General / creative questions ("Write me a poem about nature")</div>
+        <div class="quiz-opt" data-pts="1"><span class="dot"></span> Specific factual questions about documents ("What is the refund policy?") (+1 point)</div>
+        <div class="quiz-opt" data-pts="0"><span class="dot"></span> General / creative questions ("Write me a poem about nature")</div>
       </div>
     </div>
-    <div class="quiz-q">
+    <div class="quiz-q" data-q="5">
       <div class="quiz-q-num">Question 5</div>
       <div class="quiz-q-text">Do you have documents / data you want the AI to reference?</div>
       <div class="quiz-opts">
-        <div class="quiz-opt yes"><span class="dot"></span> Yes — I have PDFs, CSVs, wikis, databases, etc. (+1 point)</div>
-        <div class="quiz-opt"><span class="dot"></span> No — I just want AI to answer from its training data</div>
+        <div class="quiz-opt" data-pts="1"><span class="dot"></span> Yes — I have PDFs, CSVs, wikis, databases, etc. (+1 point)</div>
+        <div class="quiz-opt" data-pts="0"><span class="dot"></span> No — I just want AI to answer from its training data</div>
       </div>
     </div>
+  </div>
+
+  <div id="quiz-score-box" style="display:none; margin-top:1.5rem; background:rgba(13,21,38,0.9); border:1px solid rgba(99,102,241,0.25); border-radius:14px; padding:1.2rem 1.5rem; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+    <div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--indigo);margin-bottom:0.2rem;">Your Score</div>
+      <div id="quiz-score-num" style="font-size:2.2rem;font-weight:900;color:var(--text);">0 / 8</div>
+    </div>
+    <div id="quiz-verdict" style="font-size:0.9rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;"></div>
   </div>
 
   <div style="margin-top: 2rem; background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.06)); border: 1px solid rgba(99,102,241,0.2); border-radius: 16px; padding: 1.5rem 2rem;">
@@ -289,5 +298,44 @@
   <p>Built with ❤️ by <a href="https://github.com/AnkitSingh36">AnkitSingh36</a> &nbsp;·&nbsp; <a href="https://github.com/AnkitSingh36/rag-universe">GitHub</a> &nbsp;·&nbsp; <a href="index.html">Home</a></p>
 </footer>
 
+<script>
+  const answers = {};
+  document.querySelectorAll('.quiz-opts').forEach(opts => {
+    opts.querySelectorAll('.quiz-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const q = opt.closest('.quiz-q').dataset.q;
+        opts.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        answers[q] = parseInt(opt.dataset.pts, 10);
+        updateScore();
+      });
+    });
+  });
+
+  function updateScore() {
+    const total = Object.values(answers).reduce((a, b) => a + b, 0);
+    const answered = Object.keys(answers).length;
+    const scoreBox = document.getElementById('quiz-score-box');
+    const scoreNum = document.getElementById('quiz-score-num');
+    const verdict = document.getElementById('quiz-verdict');
+
+    scoreBox.style.display = 'flex';
+    scoreNum.textContent = total + ' / 8';
+
+    if (answered < 5) {
+      verdict.textContent = answered + ' of 5 answered…';
+      verdict.style.cssText = 'font-size:0.9rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;background:rgba(99,102,241,0.1);color:var(--light);border:1px solid rgba(99,102,241,0.2);';
+    } else if (total <= 2) {
+      verdict.textContent = '❌ Skip RAG — fine-tune or prompt engineer instead';
+      verdict.style.cssText = 'font-size:0.9rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.2);';
+    } else if (total <= 5) {
+      verdict.textContent = '⚡ Consider RAG — compare trade-offs for your case';
+      verdict.style.cssText = 'font-size:0.9rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.2);';
+    } else {
+      verdict.textContent = '✅ Use RAG! — it\'s the right choice for your project';
+      verdict.style.cssText = 'font-size:0.9rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.2);';
+    }
+  }
+</script>
 </body>
 </html>
